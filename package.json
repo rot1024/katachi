@@ -12,11 +12,11 @@
     "craco-plugin-react-hot-reload": "^0.1.0",
     "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "prettier": "^1.18.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-hot-loader": "^4.12.11",
     "react-scripts": "3.1.1",
-    "prettier": "^1.18.2",
     "typescript": "3.5.3"
   },
   "scripts": {
@@ -24,7 +24,9 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "lint": "tsc --noEmit && eslint --ext js,ts,tsx ."
+    "lint": "tsc --noEmit && eslint --ext js,ts,tsx .",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "browserslist": {
     "production": [
@@ -37,5 +39,18 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@storybook/addon-actions": "^5.1.11",
+    "@storybook/addon-info": "^5.1.11",
+    "@storybook/addon-links": "^5.1.11",
+    "@storybook/addons": "^5.1.11",
+    "@storybook/react": "^5.1.11",
+    "@storybook/theming": "^5.1.11",
+    "@types/storybook__addon-info": "^4.1.2",
+    "@types/storybook__react": "^4.0.2",
+    "babel-loader": "^8.0.6",
+    "react-docgen-typescript-loader": "^3.1.1"
   }
 }
