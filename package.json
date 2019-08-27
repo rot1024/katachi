@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^5.3.0",
+    "@emotion/core": "^10.0.16",
+    "@emotion/styled": "^10.0.15",
     "@hot-loader/react-dom": "^16.9.0",
     "@types/jest": "24.0.18",
     "@types/node": "12.7.2",
@@ -12,10 +14,12 @@
     "craco-plugin-react-hot-reload": "^0.1.0",
     "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "konva": "^4.0.5",
     "prettier": "^1.18.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-hot-loader": "^4.12.11",
+    "react-konva": "^16.9.0-0",
     "react-scripts": "3.1.1",
     "typescript": "3.5.3"
   },
