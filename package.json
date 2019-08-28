@@ -21,6 +21,8 @@
     "react-hot-loader": "^4.12.11",
     "react-konva": "^16.9.0-0",
     "react-scripts": "3.1.1",
+    "rxjs": "^6.5.2",
+    "rxjs-hooks": "^0.5.1",
     "typescript": "3.5.3"
   },
   "scripts": {
