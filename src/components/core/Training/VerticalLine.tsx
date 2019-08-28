@@ -5,29 +5,19 @@ import { Stage, Line, Layer, Rect } from "react-konva";
 import { clamp } from "@katachi/util";
 import { TrainingProps } from "./common";
 
-// sensitive constants
+// training constants
 const baseLength = 300;
-const baseMinLength = 100;
 const whiskerLength = 20;
-const anotherLineMaxRatio = 0.9;
-const anotherLineMinRatio = 0.7;
-const pointRatioRange = 0.9;
 const calcLength = (len: number, scaleCorrection: number) =>
-  len * baseLength + baseMinLength * scaleCorrection;
+  len * baseLength * scaleCorrection;
 const calcAnotherLineLength = (ratio: number, lineLength: number) =>
-  (ratio * anotherLineMinRatio + (1 - anotherLineMinRatio)) *
-  anotherLineMaxRatio *
-  lineLength;
-const adjustPointRatio = (ratio: number) =>
-  ratio * pointRatioRange + (1 - pointRatioRange) / 2;
-const deadjustPointRatio = (ratio: number) =>
-  (ratio - (1 - pointRatioRange) / 2) / pointRatioRange;
+  ratio * lineLength;
 
-// constants
+// style constants
 const strokeWith = 3;
 const clickablePadding = 30;
 
-const HorizontalLine: React.FC<TrainingProps> = ({
+const VerticalLine: React.FC<TrainingProps> = ({
   className,
   params,
   state,
@@ -38,16 +28,12 @@ const HorizontalLine: React.FC<TrainingProps> = ({
 }) => {
   const lineLength = calcLength(params[0], scaleCorrection);
   const anotherLineLength = calcAnotherLineLength(params[1], lineLength);
-  const pointRatio = adjustPointRatio(params[2]);
-  const statePointRatio = state ? adjustPointRatio(state[0]) : undefined;
+  const pointRatio = params[2];
+  const statePointRatio = state ? state[0] : undefined;
 
   const calcStateFromY = useCallback(
     (y: number) => [
-      clamp(
-        deadjustPointRatio((y - (screenSize - lineLength) / 2) / lineLength),
-        0,
-        1
-      )
+      clamp((y - (screenSize - lineLength) / 2) / lineLength, 0, 1)
     ],
     [lineLength, screenSize]
   );
@@ -61,6 +47,8 @@ const HorizontalLine: React.FC<TrainingProps> = ({
   );
 
   const [dragging, setDragging] = useState(false);
+
+  if (lineLength === 0 || anotherLineLength === 0) return null;
 
   return (
     <Stage className={className} width={screenSize} height={screenSize}>
@@ -128,7 +116,7 @@ const HorizontalLine: React.FC<TrainingProps> = ({
           strokeWidth={strokeWith}
           stroke="#000"
         />
-        {statePointRatio && (
+        {typeof statePointRatio === "number" && (
           <Line
             points={[
               -whiskerLength / 2,
@@ -167,4 +155,4 @@ const HorizontalLine: React.FC<TrainingProps> = ({
   );
 };
 
-export default HorizontalLine;
+export default VerticalLine;

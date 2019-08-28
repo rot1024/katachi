@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from "react";
 
+import { TrainingType } from "@katachi/training";
 import { TrainingProps } from "./common";
 import VerticalLine from "./VerticalLine";
 
-export enum TrainingType {
-  VerticalLine2 = "verticalLine2"
-  // VerticalLine3 = "verticalLine3",
-  // HorizontalLine2 = "horizontailLine2",
-  // HorizontalLine3 = "horizontalLine3",
-  // Square = "square",
-  // SquareVerticalLine = "squareVerticalLine",
-  // SquareSkewedLine = "squareSkewedLine",
-  // SquareDogleggedLine = "squareDogleggedLine",
-  // SquareTriangle = "squareTriangle",
-  // SquarePoint = "squarePoint",
-  // Ellipse = "ellipse",
-  // EllipseMultiple = "ellipseMultiple"
-}
+export { TrainingType };
 
 export interface Props {
   className?: string;
