@@ -1,6 +1,17 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { KonvaEventObject } from "konva/types/Node";
 import { Stage, Line, Layer, Rect } from "react-konva";
+import { fromEvent, merge } from "rxjs";
+import {
+  mergeMap,
+  takeUntil,
+  map,
+  tap,
+  withLatestFrom,
+  filter,
+  startWith
+} from "rxjs/operators";
+import { useEventCallback } from "rxjs-hooks";
 
 import { clamp } from "@katachi/util";
 import { TrainingProps } from "./common";
@@ -24,6 +35,7 @@ const VerticalLine: React.FC<TrainingProps> = ({
   isAnswerShown,
   screenSize,
   scaleCorrection = 1,
+  disableOperation,
   onUpdate
 }) => {
   const lineLength = calcLength(params[0], scaleCorrection);
@@ -32,21 +44,52 @@ const VerticalLine: React.FC<TrainingProps> = ({
   const statePointRatio = state ? state[0] : undefined;
 
   const calcStateFromY = useCallback(
-    (y: number) => [
-      clamp((y - (screenSize - lineLength) / 2) / lineLength, 0, 1)
-    ],
+    (y: number) =>
+      clamp((y - (screenSize - lineLength) / 2) / lineLength, 0, 1),
     [lineLength, screenSize]
   );
 
-  const handleClick = useCallback(
-    (e: KonvaEventObject<MouseEvent>) => {
-      if (!onUpdate) return;
-      onUpdate(calcStateFromY(e.evt.offsetY));
-    },
-    [calcStateFromY, onUpdate]
+  const [dragStartCallback, statePointRatio2] = useEventCallback<
+    KonvaEventObject<MouseEvent>,
+    number | undefined,
+    [typeof onUpdate, typeof disableOperation, typeof calcStateFromY]
+  >(
+    (event$, inputs$, state$) =>
+      event$.pipe(
+        withLatestFrom(inputs$),
+        filter(([, [, disableOperation]]) => !disableOperation),
+        map(([e]) => [e.evt.y - e.evt.offsetY, e.evt.offsetY]),
+        mergeMap(([e, firstY]) =>
+          fromEvent<MouseEvent>(document, "mousemove").pipe(
+            startWith(firstY),
+            takeUntil(
+              merge(
+                fromEvent(document, "mouseup").pipe(
+                  withLatestFrom(state$, inputs$),
+                  tap(([, y, [onUpdate, disableOperation]]) => {
+                    if (
+                      typeof y === "number" &&
+                      onUpdate &&
+                      !disableOperation
+                    ) {
+                      onUpdate([y]);
+                    }
+                  })
+                ),
+                inputs$.pipe(
+                  filter(([, disableOperation]) => !!disableOperation)
+                )
+              )
+            ),
+            map(e2 => (typeof e2 === "number" ? e2 : e2.y - e)),
+            withLatestFrom(inputs$),
+            map(([y, [, , calcStateFromY]]) => calcStateFromY(y))
+          )
+        )
+      ),
+    statePointRatio,
+    [onUpdate, disableOperation, calcStateFromY]
   );
-
-  const [dragging, setDragging] = useState(false);
 
   if (lineLength === 0 || anotherLineLength === 0) return null;
 
@@ -95,13 +138,11 @@ const VerticalLine: React.FC<TrainingProps> = ({
       <Layer x={(screenSize / 3) * 2} y={(screenSize - lineLength) / 2}>
         <Line
           points={[0, 0, 0, lineLength]}
-          onClick={handleClick}
           strokeWidth={strokeWith}
           stroke="#000"
         />
         <Line
           points={[-whiskerLength / 2, 0, +whiskerLength / 2, 0]}
-          onClick={handleClick}
           strokeWidth={3}
           stroke="#000"
         />
@@ -112,17 +153,22 @@ const VerticalLine: React.FC<TrainingProps> = ({
             +whiskerLength / 2,
             lineLength
           ]}
-          onClick={handleClick}
           strokeWidth={strokeWith}
           stroke="#000"
         />
-        {typeof statePointRatio === "number" && (
+        <Line
+          points={[0, -clickablePadding, 0, lineLength + clickablePadding]}
+          strokeWidth={clickablePadding}
+          onMouseDown={dragStartCallback}
+          stroke="transparent"
+        />
+        {typeof statePointRatio2 === "number" && (
           <Line
             points={[
               -whiskerLength / 2,
-              lineLength * statePointRatio,
+              lineLength * statePointRatio2,
               whiskerLength / 2,
-              lineLength * statePointRatio
+              lineLength * statePointRatio2
             ]}
             strokeWidth={strokeWith}
             stroke="#000"
@@ -140,16 +186,6 @@ const VerticalLine: React.FC<TrainingProps> = ({
             stroke="#f00"
           />
         )}
-        <Line
-          points={[0, -clickablePadding, 0, lineLength + clickablePadding]}
-          strokeWidth={clickablePadding}
-          onClick={handleClick}
-          onMouseDown={() => setDragging(true)}
-          onMouseUp={() => setDragging(false)}
-          onMouseLeave={() => setDragging(false)}
-          onMouseMove={dragging ? handleClick : undefined}
-          stroke="transparent"
-        />
       </Layer>
     </Stage>
   );
