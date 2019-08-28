@@ -11,7 +11,24 @@ storiesOf("VerticalLine2", module)
       state={[1]}
       screenSize={500}
       onUpdate={action("onUpdate")}
+    />
+  ))
+  .add("with answer", () => (
+    <Component
+      params={[0.5, 0.5, 0.5]}
+      state={[1]}
+      screenSize={500}
+      onUpdate={action("onUpdate")}
       isAnswerShown
+    />
+  ))
+  .add("with disableOperation", () => (
+    <Component
+      params={[0.5, 0.5, 0.5]}
+      state={[1]}
+      screenSize={500}
+      onUpdate={action("onUpdate")}
+      disableOperation
     />
   ))
   .add("extream min", () => (
