@@ -4,17 +4,25 @@ import styled from "@emotion/styled";
 export interface Props {
   className?: string;
   duration?: number;
+  enabled?: boolean;
   onTimeUp?: () => void;
+  id?: number;
 }
 
-const Timer: React.FC<Props> = ({ className, duration, onTimeUp }) => {
+const Timer: React.FC<Props> = ({
+  className,
+  duration,
+  onTimeUp,
+  id,
+  enabled
+}) => {
   const [ratio, setRatio] = useState(0);
   const onTimeUpRef = useRef(onTimeUp);
   onTimeUpRef.current = onTimeUp;
 
   useEffect(() => {
+    if (!enabled || !duration) return;
     setRatio(0);
-    if (!duration) return;
     const start = Date.now();
     const time = setInterval(() => {
       const r = Math.min((Date.now() - start) / duration, 1);
@@ -27,7 +35,7 @@ const Timer: React.FC<Props> = ({ className, duration, onTimeUp }) => {
       }
     }, 17);
     return () => clearInterval(time);
-  }, [duration]);
+  }, [duration, enabled, id]);
 
   return (
     <Wrapper className={className}>{duration && <Bar ratio={ratio} />}</Wrapper>
