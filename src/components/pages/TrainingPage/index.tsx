@@ -9,6 +9,7 @@ import {
 import Training from "@katachi/components/components/Training";
 import Button from "@katachi/components/components/Button";
 import Timer from "@katachi/components/components/Timer";
+import TrainingResult from "@katachi/components/components/TrainingResult";
 
 export { TrainingType };
 
@@ -41,8 +42,8 @@ const TrainingPage: React.FC<Props> = ({
   const [isAnswerShown, setAnswerShown] = useState(false);
 
   const handleAnswer = useCallback(() => {
-    if (!trainings) return;
-    if (trainings.length <= currentTraining || !currentState) return;
+    if (!trainings || trainings.length <= currentTraining || !currentState)
+      return;
     const score = judgeScore(type, trainings[currentTraining], currentState);
     scores.current = [...scores.current, score];
     setAnswerShown(true);
@@ -52,14 +53,8 @@ const TrainingPage: React.FC<Props> = ({
     if (!trainings) return;
     setAnswerShown(false);
     setCurrentState(undefined);
-    if (trainings.length - 1 <= currentTraining) {
-      if (onFinish) {
-        onFinish(scores.current, type, trainings);
-      }
-    } else {
-      changeTraining(i => i + 1);
-    }
-  }, [currentTraining, onFinish, trainings, type]);
+    changeTraining(i => i + 1);
+  }, [trainings]);
 
   const isAnswerable = useMemo(
     () => !isAnswerShown && currentState && validateState(type, currentState),
@@ -67,7 +62,7 @@ const TrainingPage: React.FC<Props> = ({
   );
 
   const handleTimeUp = useCallback(() => {
-    if (!trainings) return;
+    if (!trainings || trainings.length <= currentTraining) return;
     const score = judgeScore(
       type,
       trainings[currentTraining],
@@ -77,27 +72,44 @@ const TrainingPage: React.FC<Props> = ({
     setAnswerShown(true);
   }, [currentState, currentTraining, isAnswerable, trainings, type]);
 
-  if (!trainings || trainings.length <= currentTraining) return null;
+  if (!trainings) return null;
 
   return (
     <div className={className}>
-      <Timer
-        id={currentTraining}
-        enabled={!isAnswerShown}
-        duration={duration}
-        onTimeUp={handleTimeUp}
-      />
-      <Training
-        type={type}
-        params={trainings[currentTraining]}
-        screenSize={screenSize}
-        scaleCorrection={scaleCorrection}
-        isAnswerShown={isAnswerShown}
-        disableOperation={isAnswerShown}
-        onUpdate={s => setCurrentState(s)}
-      />
-      {isAnswerable && <Button onClick={handleAnswer}>OK</Button>}
-      {isAnswerShown && <Button onClick={handleNext}>Next</Button>}
+      {trainings.length <= currentTraining ? (
+        <>
+          <TrainingResult type={type} scores={scores.current} />
+          <Button
+            onClick={() => {
+              if (onFinish) {
+                onFinish(scores.current, type, trainings);
+              }
+            }}
+          >
+            Finish
+          </Button>
+        </>
+      ) : (
+        <>
+          <Timer
+            id={currentTraining}
+            enabled={!isAnswerShown}
+            duration={duration}
+            onTimeUp={handleTimeUp}
+          />
+          <Training
+            type={type}
+            params={trainings[currentTraining]}
+            screenSize={screenSize}
+            scaleCorrection={scaleCorrection}
+            isAnswerShown={isAnswerShown}
+            disableOperation={isAnswerShown}
+            onUpdate={s => setCurrentState(s)}
+          />
+          {isAnswerable && <Button onClick={handleAnswer}>OK</Button>}
+          {isAnswerShown && <Button onClick={handleNext}>Next</Button>}
+        </>
+      )}
     </div>
   );
 };
