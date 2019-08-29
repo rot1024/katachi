@@ -8,6 +8,7 @@ import {
 } from "@katachi/training";
 import Training from "@katachi/components/components/Training";
 import Button from "@katachi/components/components/Button";
+import Timer from "@katachi/components/components/Timer";
 
 export { TrainingType };
 
@@ -15,6 +16,7 @@ export interface Props {
   className?: string;
   type: TrainingType;
   scaleCorrection?: number;
+  duration: number;
   onFinish?: (
     scores: number[],
     type: TrainingType,
@@ -29,6 +31,7 @@ const TrainingPage: React.FC<Props> = ({
   className,
   type,
   scaleCorrection,
+  duration,
   onFinish
 }) => {
   const scores = useRef<number[]>([]);
@@ -61,10 +64,26 @@ const TrainingPage: React.FC<Props> = ({
     [currentState, isAnswerShown, type]
   );
 
+  const handleTimeUp = useCallback(() => {
+    const score = judgeScore(
+      type,
+      trainings[currentTraining],
+      isAnswerable ? currentState : undefined
+    );
+    scores.current = [...scores.current, score];
+    setAnswerShown(true);
+  }, [currentState, currentTraining, isAnswerable, trainings, type]);
+
   if (trainings.length <= currentTraining) return null;
 
   return (
     <div className={className}>
+      <Timer
+        id={currentTraining}
+        enabled={!isAnswerShown}
+        duration={duration}
+        onTimeUp={handleTimeUp}
+      />
       <Training
         type={type}
         params={trainings[currentTraining]}
