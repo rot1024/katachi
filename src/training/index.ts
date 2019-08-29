@@ -35,5 +35,5 @@ export const validateState = (type: TrainingType, state: number[]) =>
 export const judgeScore = (
   type: TrainingType,
   params: number[],
-  state: number[]
+  state?: number[]
 ) => trainings[type].judgeScore(params, state);

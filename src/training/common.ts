@@ -2,7 +2,7 @@ export interface TrainingMenu {
   paramsSize: number;
   stateSize: number;
   validateParams: (params: number[]) => number[] | boolean;
-  judgeScore: (params: number[], state: number[]) => number;
+  judgeScore: (params: number[], state?: number[]) => number;
 }
 
 export enum Score {
