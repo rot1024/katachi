@@ -22,14 +22,81 @@ import { TrainingProps } from "./common";
 // training constants
 const baseLength = 300;
 const whiskerLength = 20;
-const calcLength = (len: number, scaleCorrection: number) =>
-  len * baseLength * scaleCorrection;
-const calcAnotherLineLength = (ratio: number, lineLength: number) =>
-  ratio * lineLength;
+const calcLength = (ratio: number, scaleCorrection: number) =>
+  ratio * baseLength * scaleCorrection;
 
 // style constants
 const strokeWith = 3;
 const clickablePadding = 30;
+
+const VerticalLineLayer: React.FC<{
+  longerLength: number;
+  lineLength: number;
+  x: number;
+  y: number;
+  ratio?: number;
+  answerRatio?: number;
+  onMouseDown?: (e: KonvaEventObject<MouseEvent>) => void;
+}> = ({ longerLength, lineLength, x, y, ratio, answerRatio, onMouseDown }) =>
+  longerLength === 0 || lineLength === 0 ? null : (
+    <Layer x={x} y={y}>
+      <Line
+        points={[0, longerLength - lineLength, 0, longerLength]}
+        strokeWidth={strokeWith}
+        stroke="#000"
+      />
+      <Line
+        points={[
+          -whiskerLength / 2,
+          longerLength - lineLength,
+          +whiskerLength / 2,
+          longerLength - lineLength
+        ]}
+        strokeWidth={strokeWith}
+        stroke="#000"
+      />
+      <Line
+        points={[
+          -whiskerLength / 2,
+          longerLength,
+          +whiskerLength / 2,
+          longerLength
+        ]}
+        strokeWidth={strokeWith}
+        stroke="#000"
+      />
+      {typeof ratio === "number" && (
+        <Line
+          points={[
+            -whiskerLength / 2,
+            longerLength - lineLength * (1 - ratio),
+            whiskerLength / 2,
+            longerLength - lineLength * (1 - ratio)
+          ]}
+          strokeWidth={strokeWith}
+          stroke="#000"
+        />
+      )}
+      {answerRatio && (
+        <Line
+          points={[
+            -whiskerLength / 2,
+            longerLength - lineLength * (1 - answerRatio),
+            whiskerLength / 2,
+            longerLength - lineLength * (1 - answerRatio)
+          ]}
+          strokeWidth={strokeWith}
+          stroke="#f00"
+        />
+      )}
+      <Line
+        points={[0, -clickablePadding, 0, longerLength + clickablePadding]}
+        strokeWidth={clickablePadding}
+        onMouseDown={onMouseDown}
+        stroke="transparent"
+      />
+    </Layer>
+  );
 
 const VerticalLine: React.FC<TrainingProps> = ({
   className,
@@ -42,14 +109,20 @@ const VerticalLine: React.FC<TrainingProps> = ({
   onUpdate
 }) => {
   const lineLength = calcLength(params[0], scaleCorrection);
-  const anotherLineLength = calcAnotherLineLength(params[1], lineLength);
+  const line2Length = calcLength(params[1], scaleCorrection);
+  const longerLength = Math.max(lineLength, line2Length);
   const pointRatio = params[2];
   const statePointRatio = state ? state[0] : undefined;
 
   const calcStateFromY = useCallback(
     (y: number) =>
-      clamp((y - (screenSize - lineLength) / 2) / lineLength, 0, 1),
-    [lineLength, screenSize]
+      clamp(
+        (y - ((screenSize - longerLength) / 2 + (longerLength - lineLength))) /
+          lineLength,
+        0,
+        1
+      ),
+    [lineLength, longerLength, screenSize]
   );
 
   type DragStartInputs = [
@@ -121,102 +194,27 @@ const VerticalLine: React.FC<TrainingProps> = ({
     dragStartInputs
   );
 
-  if (lineLength === 0 || anotherLineLength === 0) return null;
-
   return (
     <Stage className={className} width={screenSize} height={screenSize}>
       <Layer>
         <Rect stroke="#eee" width={screenSize} height={screenSize} />
       </Layer>
-      <Layer x={screenSize / 3} y={(screenSize - lineLength) / 2}>
-        <Line
-          points={[0, lineLength - anotherLineLength, 0, lineLength]}
-          strokeWidth={strokeWith}
-          stroke="#000"
-        />
-        <Line
-          points={[
-            -whiskerLength / 2,
-            lineLength - anotherLineLength,
-            +whiskerLength / 2,
-            lineLength - anotherLineLength
-          ]}
-          strokeWidth={strokeWith}
-          stroke="#000"
-        />
-        <Line
-          points={[
-            -whiskerLength / 2,
-            lineLength,
-            +whiskerLength / 2,
-            lineLength
-          ]}
-          strokeWidth={strokeWith}
-          stroke="#000"
-        />
-        <Line
-          points={[
-            -whiskerLength / 2,
-            lineLength + anotherLineLength * (pointRatio - 1),
-            whiskerLength / 2,
-            lineLength + anotherLineLength * (pointRatio - 1)
-          ]}
-          strokeWidth={strokeWith}
-          stroke="#000"
-        />
-      </Layer>
-      <Layer x={(screenSize / 3) * 2} y={(screenSize - lineLength) / 2}>
-        <Line
-          points={[0, 0, 0, lineLength]}
-          strokeWidth={strokeWith}
-          stroke="#000"
-        />
-        <Line
-          points={[-whiskerLength / 2, 0, +whiskerLength / 2, 0]}
-          strokeWidth={3}
-          stroke="#000"
-        />
-        <Line
-          points={[
-            -whiskerLength / 2,
-            lineLength,
-            +whiskerLength / 2,
-            lineLength
-          ]}
-          strokeWidth={strokeWith}
-          stroke="#000"
-        />
-        <Line
-          points={[0, -clickablePadding, 0, lineLength + clickablePadding]}
-          strokeWidth={clickablePadding}
-          onMouseDown={dragStartCallback}
-          stroke="transparent"
-        />
-        {typeof statePointRatio2 === "number" && (
-          <Line
-            points={[
-              -whiskerLength / 2,
-              lineLength * statePointRatio2,
-              whiskerLength / 2,
-              lineLength * statePointRatio2
-            ]}
-            strokeWidth={strokeWith}
-            stroke="#000"
-          />
-        )}
-        {isAnswerShown && (
-          <Line
-            points={[
-              -whiskerLength / 2,
-              lineLength * pointRatio,
-              whiskerLength / 2,
-              lineLength * pointRatio
-            ]}
-            strokeWidth={strokeWith}
-            stroke="#f00"
-          />
-        )}
-      </Layer>
+      <VerticalLineLayer
+        x={screenSize / 3}
+        y={(screenSize - longerLength) / 2}
+        lineLength={line2Length}
+        longerLength={longerLength}
+        ratio={pointRatio}
+      />
+      <VerticalLineLayer
+        x={(screenSize / 3) * 2}
+        y={(screenSize - longerLength) / 2}
+        lineLength={lineLength}
+        longerLength={longerLength}
+        ratio={statePointRatio2 ? statePointRatio2 : undefined}
+        answerRatio={isAnswerShown ? pointRatio : undefined}
+        onMouseDown={dragStartCallback}
+      />
     </Stage>
   );
 };
