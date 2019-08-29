@@ -9,11 +9,14 @@ import {
   tap,
   withLatestFrom,
   filter,
-  startWith
+  startWith,
+  distinctUntilChanged,
+  mapTo,
+  skip
 } from "rxjs/operators";
 import { useEventCallback } from "rxjs-hooks";
 
-import { clamp } from "@katachi/util";
+import { clamp, numberArrayEqual } from "@katachi/util";
 import { TrainingProps } from "./common";
 
 // training constants
@@ -49,46 +52,73 @@ const VerticalLine: React.FC<TrainingProps> = ({
     [lineLength, screenSize]
   );
 
+  type DragStartInputs = [
+    typeof onUpdate,
+    typeof disableOperation,
+    typeof calcStateFromY,
+    typeof params
+  ];
+  const dragStartInputs: DragStartInputs = [
+    onUpdate,
+    disableOperation,
+    calcStateFromY,
+    params
+  ];
   const [dragStartCallback, statePointRatio2] = useEventCallback<
     KonvaEventObject<MouseEvent>,
     number | undefined,
-    [typeof onUpdate, typeof disableOperation, typeof calcStateFromY]
+    DragStartInputs
   >(
     (event$, inputs$, state$) =>
-      event$.pipe(
-        withLatestFrom(inputs$),
-        filter(([, [, disableOperation]]) => !disableOperation),
-        map(([e]) => [e.evt.y - e.evt.offsetY, e.evt.offsetY]),
-        mergeMap(([e, firstY]) =>
-          fromEvent<MouseEvent>(document, "mousemove").pipe(
-            startWith(firstY),
-            takeUntil(
-              merge(
-                fromEvent(document, "mouseup").pipe(
-                  withLatestFrom(state$, inputs$),
-                  tap(([, y, [onUpdate, disableOperation]]) => {
-                    if (
-                      typeof y === "number" &&
-                      onUpdate &&
-                      !disableOperation
-                    ) {
-                      onUpdate([y]);
-                    }
-                  })
-                ),
-                inputs$.pipe(
-                  filter(([, disableOperation]) => !!disableOperation)
+      merge(
+        inputs$.pipe(
+          map(([, , , p]) => p),
+          distinctUntilChanged(numberArrayEqual),
+          mapTo(undefined)
+        ),
+        event$.pipe(
+          withLatestFrom(inputs$),
+          filter(([, [, disableOperation]]) => !disableOperation),
+          map(([e]) => [e.evt.y - e.evt.offsetY, e.evt.offsetY]),
+          mergeMap(([e, firstY]) =>
+            fromEvent<MouseEvent>(document, "mousemove").pipe(
+              startWith(firstY),
+              takeUntil(
+                merge(
+                  fromEvent(document, "mouseup").pipe(
+                    withLatestFrom(state$, inputs$),
+                    tap(([, y, [onUpdate, disableOperation]]) => {
+                      if (
+                        typeof y === "number" &&
+                        onUpdate &&
+                        !disableOperation
+                      ) {
+                        onUpdate([y]);
+                      }
+                    })
+                  ),
+                  inputs$.pipe(
+                    skip(1),
+                    map(([, disableOperation]) => disableOperation),
+                    distinctUntilChanged(),
+                    filter(d => !!d)
+                  ),
+                  inputs$.pipe(
+                    skip(1),
+                    map(([, , , params]) => params),
+                    distinctUntilChanged(numberArrayEqual)
+                  )
                 )
-              )
-            ),
-            map(e2 => (typeof e2 === "number" ? e2 : e2.y - e)),
-            withLatestFrom(inputs$),
-            map(([y, [, , calcStateFromY]]) => calcStateFromY(y))
+              ),
+              map(e2 => (typeof e2 === "number" ? e2 : e2.y - e)),
+              withLatestFrom(inputs$),
+              map(([y, [, , calcStateFromY]]) => calcStateFromY(y))
+            )
           )
         )
       ),
     statePointRatio,
-    [onUpdate, disableOperation, calcStateFromY]
+    dragStartInputs
   );
 
   if (lineLength === 0 || anotherLineLength === 0) return null;
