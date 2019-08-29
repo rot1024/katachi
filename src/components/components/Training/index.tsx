@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useCallback } from "react";
 
 import { TrainingType } from "@katachi/training";
 import { TrainingProps } from "./common";
@@ -10,9 +10,12 @@ export interface Props {
   className?: string;
   type: TrainingType;
   params: number[];
+  state?: number[];
   isAnswerShown?: boolean;
+  disableOperation?: boolean;
   screenSize: number;
   scaleCorrection?: number;
+  onUpdate?: (state: number[]) => void;
 }
 
 const getTrainingComponent = (
@@ -26,13 +29,20 @@ const getTrainingComponent = (
 };
 
 const Training: React.FC<Props> = props => {
-  const [state, setState] = useState<number[] | undefined>();
-  useEffect(() => setState(undefined), [props.params, props.type]);
+  const { onUpdate } = props;
+  const handleUpdate = useCallback(
+    (s: number[]) => {
+      if (onUpdate) {
+        onUpdate(s);
+      }
+    },
+    [onUpdate]
+  );
+
   const Component = getTrainingComponent(props.type);
-  if (Component) {
-    return <Component {...props} state={state} onUpdate={s => setState(s)} />;
-  }
-  return null;
+
+  if (!Component) return null;
+  return <Component {...props} onUpdate={handleUpdate} />;
 };
 
 export default Training;
