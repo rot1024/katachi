@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 
 import { TrainingType } from "@katachi/training";
 import { TrainingProps } from "./common";
@@ -29,20 +29,9 @@ const getTrainingComponent = (
 };
 
 const Training: React.FC<Props> = props => {
-  const { onUpdate } = props;
-  const handleUpdate = useCallback(
-    (s: number[]) => {
-      if (onUpdate) {
-        onUpdate(s);
-      }
-    },
-    [onUpdate]
-  );
-
   const Component = getTrainingComponent(props.type);
-
   if (!Component) return null;
-  return <Component {...props} onUpdate={handleUpdate} />;
+  return <Component {...props} />;
 };
 
 export default Training;
