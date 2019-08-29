@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { KonvaEventObject } from "konva/types/Node";
-import { Stage, Line, Layer, Rect } from "react-konva";
+import { Stage, Layer, Rect } from "react-konva";
 import { fromEvent, merge } from "rxjs";
 import {
   mergeMap,
@@ -17,86 +17,10 @@ import {
 import { useEventCallback } from "rxjs-hooks";
 
 import { clamp, numberArrayEqual } from "@katachi/util";
-import { TrainingProps } from "./common";
+import { TrainingProps } from "../common";
 
-// training constants
-const baseLength = 300;
-const whiskerLength = 20;
-const calcLength = (ratio: number, scaleCorrection: number) =>
-  ratio * baseLength * scaleCorrection;
-
-// style constants
-const strokeWith = 3;
-const clickablePadding = 30;
-
-const VerticalLineLayer: React.FC<{
-  longerLength: number;
-  lineLength: number;
-  x: number;
-  y: number;
-  ratio?: number;
-  answerRatio?: number;
-  onMouseDown?: (e: KonvaEventObject<MouseEvent>) => void;
-}> = ({ longerLength, lineLength, x, y, ratio, answerRatio, onMouseDown }) =>
-  longerLength === 0 || lineLength === 0 ? null : (
-    <Layer x={x} y={y}>
-      <Line
-        points={[0, longerLength - lineLength, 0, longerLength]}
-        strokeWidth={strokeWith}
-        stroke="#000"
-      />
-      <Line
-        points={[
-          -whiskerLength / 2,
-          longerLength - lineLength,
-          +whiskerLength / 2,
-          longerLength - lineLength
-        ]}
-        strokeWidth={strokeWith}
-        stroke="#000"
-      />
-      <Line
-        points={[
-          -whiskerLength / 2,
-          longerLength,
-          +whiskerLength / 2,
-          longerLength
-        ]}
-        strokeWidth={strokeWith}
-        stroke="#000"
-      />
-      {typeof ratio === "number" && (
-        <Line
-          points={[
-            -whiskerLength / 2,
-            longerLength - lineLength * (1 - ratio),
-            whiskerLength / 2,
-            longerLength - lineLength * (1 - ratio)
-          ]}
-          strokeWidth={strokeWith}
-          stroke="#000"
-        />
-      )}
-      {answerRatio && (
-        <Line
-          points={[
-            -whiskerLength / 2,
-            longerLength - lineLength * (1 - answerRatio),
-            whiskerLength / 2,
-            longerLength - lineLength * (1 - answerRatio)
-          ]}
-          strokeWidth={strokeWith}
-          stroke="#f00"
-        />
-      )}
-      <Line
-        points={[0, -clickablePadding, 0, longerLength + clickablePadding]}
-        strokeWidth={clickablePadding}
-        onMouseDown={onMouseDown}
-        stroke="transparent"
-      />
-    </Layer>
-  );
+import { calcLength } from "./constants";
+import VerticalLineLayer from "./VerticalLineLayer";
 
 const VerticalLine: React.FC<TrainingProps> = ({
   className,
