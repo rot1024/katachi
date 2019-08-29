@@ -1,4 +1,6 @@
-import React, { useState, useCallback, useMemo, useRef } from "react";
+/** @jsx jsx */
+import React, { useState, useCallback, useMemo, useRef, Fragment } from "react";
+import { jsx, css } from "@emotion/core";
 
 import {
   TrainingType,
@@ -10,6 +12,7 @@ import Training from "@katachi/components/components/Training";
 import Button from "@katachi/components/components/Button";
 import Timer from "@katachi/components/components/Timer";
 import TrainingResult from "@katachi/components/components/TrainingResult";
+import Rating from "@katachi/components/components/Rating";
 
 export { TrainingType };
 
@@ -75,9 +78,14 @@ const TrainingPage: React.FC<Props> = ({
   if (!trainings) return null;
 
   return (
-    <div className={className}>
+    <div
+      css={css`
+        position: relative;
+      `}
+      className={className}
+    >
       {trainings.length <= currentTraining ? (
-        <>
+        <Fragment>
           <TrainingResult type={type} scores={scores.current} />
           <Button
             onClick={() => {
@@ -88,27 +96,48 @@ const TrainingPage: React.FC<Props> = ({
           >
             Finish
           </Button>
-        </>
+        </Fragment>
       ) : (
-        <>
+        <Fragment>
           <Timer
             id={currentTraining}
             enabled={!isAnswerShown}
             duration={duration}
             onTimeUp={handleTimeUp}
           />
-          <Training
-            type={type}
-            params={trainings[currentTraining]}
-            screenSize={screenSize}
-            scaleCorrection={scaleCorrection}
-            isAnswerShown={isAnswerShown}
-            disableOperation={isAnswerShown}
-            onUpdate={s => setCurrentState(s)}
-          />
+          {isAnswerShown && scores.current.length > 0 && (
+            <div
+              css={css`
+                position: absolute;
+                top: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+              `}
+            >
+              <Rating score={scores.current[scores.current.length - 1]} />
+            </div>
+          )}
+          <div
+            css={css`
+              text-align: center;
+            `}
+          >
+            <Training
+              css={css`
+                display: inline-block;
+              `}
+              type={type}
+              params={trainings[currentTraining]}
+              screenSize={screenSize}
+              scaleCorrection={scaleCorrection}
+              isAnswerShown={isAnswerShown}
+              disableOperation={isAnswerShown}
+              onUpdate={s => setCurrentState(s)}
+            />
+          </div>
           {isAnswerable && <Button onClick={handleAnswer}>OK</Button>}
           {isAnswerShown && <Button onClick={handleNext}>Next</Button>}
-        </>
+        </Fragment>
       )}
     </div>
   );
