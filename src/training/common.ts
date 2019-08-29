@@ -5,7 +5,7 @@ export interface TrainingMenu {
   judgeScore: (params: number[], state?: number[]) => number;
 }
 
-export enum Score {
+export enum Rating {
   Legend = "legend",
   Perfect = "perfect",
   Excellent = "excellent",
