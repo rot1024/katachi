@@ -41,6 +41,7 @@ const TrainingPage: React.FC<Props> = ({
   const [isAnswerShown, setAnswerShown] = useState(false);
 
   const handleAnswer = useCallback(() => {
+    if (!trainings) return;
     if (trainings.length <= currentTraining || !currentState) return;
     const score = judgeScore(type, trainings[currentTraining], currentState);
     scores.current = [...scores.current, score];
@@ -48,6 +49,7 @@ const TrainingPage: React.FC<Props> = ({
   }, [currentState, currentTraining, trainings, type]);
 
   const handleNext = useCallback(() => {
+    if (!trainings) return;
     setAnswerShown(false);
     setCurrentState(undefined);
     if (trainings.length - 1 <= currentTraining) {
@@ -65,6 +67,7 @@ const TrainingPage: React.FC<Props> = ({
   );
 
   const handleTimeUp = useCallback(() => {
+    if (!trainings) return;
     const score = judgeScore(
       type,
       trainings[currentTraining],
@@ -74,7 +77,7 @@ const TrainingPage: React.FC<Props> = ({
     setAnswerShown(true);
   }, [currentState, currentTraining, isAnswerable, trainings, type]);
 
-  if (trainings.length <= currentTraining) return null;
+  if (!trainings || trainings.length <= currentTraining) return null;
 
   return (
     <div className={className}>

@@ -8,25 +8,30 @@ const trainings: { [key in TrainingType]: TrainingMenu } = {
   [TrainingType.VerticalLine2]: verticalLine2
 };
 
-export const initTrainings = (type: TrainingType, count: number): number[][] =>
-  new Array(count).fill(0).map(() => initTraining(type));
+export const initTrainings = (
+  type: TrainingType,
+  count: number
+): number[][] | undefined => {
+  const params = new Array(count).fill(0).map(() => initTraining(type));
+  return params.every((p): p is number[] => typeof p !== "undefined")
+    ? (params as number[][])
+    : undefined;
+};
 
-export const initTraining = (type: TrainingType): number[] => {
+export const initTraining = (type: TrainingType): number[] | undefined => {
   const trainingMenu = trainings[type];
-  let newParams: number[] = [];
-  for (let i = 0; i < 5; i++) {
-    newParams = new Array(trainingMenu.paramsSize)
+  for (let i = 0; i < 100; i++) {
+    const params = new Array(trainingMenu.paramsSize)
       .fill(0)
       .map(() => Math.random());
-    const validated = trainingMenu.validateParams(newParams);
+    const validated = trainingMenu.validateParams(params);
     if (Array.isArray(validated)) {
-      newParams = validated;
+      return validated;
     }
     if (validated) {
-      return newParams;
+      return params;
     }
   }
-  return newParams;
 };
 
 export const validateState = (type: TrainingType, state: number[]) =>
