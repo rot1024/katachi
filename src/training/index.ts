@@ -8,6 +8,9 @@ const trainings: { [key in TrainingType]: TrainingMenu } = {
   [TrainingType.VerticalLine2]: verticalLine2
 };
 
+export const initTrainings = (type: TrainingType, count: number): number[][] =>
+  new Array(count).fill(0).map(() => initTraining(type));
+
 export const initTraining = (type: TrainingType): number[] => {
   const trainingMenu = trainings[type];
   let newParams: number[] = [];
