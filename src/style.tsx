@@ -12,7 +12,8 @@ import {
 library.add(faShapes, faChartLine, faSlidersH);
 
 export const theme = {
-  accent: "tomato"
+  accent: "tomato",
+  inactive: "#aaa"
 };
 
 export const GlobalStyle: FC = () => (
