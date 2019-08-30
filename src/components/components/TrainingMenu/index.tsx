@@ -20,7 +20,7 @@ export interface Props {
   onSelect?: (type: TrainingType, level: Level) => void;
 }
 
-const Menu: React.FC<Props> = ({ className, onSelect }) => {
+const TrainingMenu: React.FC<Props> = ({ className, onSelect }) => {
   const [selectedType, selectType] = useState<TrainingType>();
 
   const handleTypeClick = useCallback(
@@ -62,21 +62,33 @@ const Menu: React.FC<Props> = ({ className, onSelect }) => {
   );
 };
 
-const MenuItem = styled.div`
+const MenuItem = styled.div<{ bgcolor?: string }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 200px;
-  height: 200px;
+  max-width: 200px;
+  max-height: 200px;
+  width: 50vw;
+  height: 50vw;
   vertical-align: middle;
   user-select: none;
-  padding: 10px;
+  border-radius: 0.5em;
+  box-shadow: 0 0.1em 0.5em #00000030;
   cursor: pointer;
-  transition: all ease 0.2s;
+  transition: all ease 0.1s;
+  background-color: ${({ bgcolor }) => bgcolor || "#bbb"};
+  color: #fff;
+  box-sizing: border-box;
+  margin: 0.3em;
 
   &:hover {
-    background-color: #ccc;
+    filter: brightness(105%);
+  }
+
+  &:active {
+    filter: brightness(100%);
+    transform: translateY(1px);
   }
 `;
 
-export default Menu;
+export default TrainingMenu;

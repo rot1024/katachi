@@ -4,6 +4,6 @@ import { action } from "@storybook/addon-actions";
 
 import Component from ".";
 
-storiesOf("Menu", module).add("default", () => (
+storiesOf("TrainingMenu", module).add("default", () => (
   <Component onSelect={action("select")} />
 ));
