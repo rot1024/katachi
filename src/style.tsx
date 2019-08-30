@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import { Global, css } from "@emotion/core";
+import React, { FC, useContext } from "react";
+import { Global, css, ThemeContext } from "@emotion/core";
 import emotionStyled, { CreateStyled } from "@emotion/styled";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -11,9 +11,9 @@ import {
 
 library.add(faShapes, faChartLine, faSlidersH);
 
-export const theme = {};
-
-export const styled = emotionStyled as CreateStyled<typeof theme>;
+export const theme = {
+  accent: "tomato"
+};
 
 export const GlobalStyle: FC = () => (
   <Global
@@ -68,3 +68,7 @@ export const GlobalStyle: FC = () => (
     `}
   />
 );
+
+export const styled = emotionStyled as CreateStyled<typeof theme>;
+
+export const useTheme = () => useContext<typeof theme>(ThemeContext as any);

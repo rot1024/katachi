@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "@emotion/styled";
+import { styled } from "@katachi/style";
 
 export interface Props {
   className?: string;
@@ -22,7 +22,7 @@ const StyledButton = styled.button`
   border-radius: 0.5em;
   border: none;
   outline: none;
-  background-color: red;
+  background-color: ${({ theme }) => theme.accent};
   color: #fff;
   padding: 1em 3em;
   box-shadow: 0 0.1em 0.5em #00000030;

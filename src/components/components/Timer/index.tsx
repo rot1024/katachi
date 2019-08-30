@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import styled from "@emotion/styled";
+import { styled } from "@katachi/style";
 
 export enum DisplayStyle {
   Bar,
@@ -62,7 +62,7 @@ const BarWrapper = styled.div`
 const Bar = styled.div<{ ratio: number }>`
   width: ${({ ratio }) => (1 - ratio) * 100}%;
   height: 3px;
-  background-color: red;
+  background-color: ${({ theme }) => theme.accent};
 `;
 
 const TextWrapper = styled.div`

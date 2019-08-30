@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "@emotion/styled";
+import { styled } from "@katachi/style";
 
 import { getRating, Rating as RatingEnum } from "@katachi/training";
 

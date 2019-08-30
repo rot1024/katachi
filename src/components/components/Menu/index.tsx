@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React, { useCallback, useState, Fragment } from "react";
 import { jsx } from "@emotion/core";
-import styled from "@emotion/styled";
+import { styled } from "@katachi/style";
 
 import { TrainingType, Level } from "@katachi/training";
 
