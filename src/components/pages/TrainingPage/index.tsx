@@ -11,6 +11,7 @@ import {
 import Training from "@katachi/components/components/Training";
 import Button from "@katachi/components/components/Button";
 import Timer from "@katachi/components/components/Timer";
+import TrainingStart from "@katachi/components/components/TrainingStart";
 import TrainingResult from "@katachi/components/components/TrainingResult";
 import Rating from "@katachi/components/components/Rating";
 
@@ -40,6 +41,7 @@ const TrainingPage: React.FC<Props> = ({
 }) => {
   const scores = useRef<number[]>([]);
   const trainings = useMemo(() => initTrainings(type, trainingCount), [type]);
+  const [started, setStarted] = useState(false);
   const [currentTraining, changeTraining] = useState(0);
   const [currentState, setCurrentState] = useState<number[]>();
   const [isAnswerShown, setAnswerShown] = useState(false);
@@ -75,6 +77,10 @@ const TrainingPage: React.FC<Props> = ({
     setAnswerShown(true);
   }, [currentState, currentTraining, isAnswerable, trainings, type]);
 
+  const handleStart = useCallback(() => {
+    setStarted(true);
+  }, []);
+
   if (!trainings) return null;
 
   return (
@@ -84,7 +90,9 @@ const TrainingPage: React.FC<Props> = ({
       `}
       className={className}
     >
-      {trainings.length <= currentTraining ? (
+      {!started ? (
+        <TrainingStart duration={3000} onStart={handleStart} />
+      ) : trainings.length <= currentTraining ? (
         <Fragment>
           <TrainingResult type={type} scores={scores.current} />
           <Button
