@@ -64,6 +64,7 @@ const MenuItem = styled.div<{ active?: boolean }>`
   font-size: 0.8rem;
   font-weight: bold;
   color: ${({ active, theme }) => (active ? theme.accent : theme.inactive)};
+  flex: 1 1 0;
 `;
 
 const Icon = styled(FontAwesomeIcon)`
