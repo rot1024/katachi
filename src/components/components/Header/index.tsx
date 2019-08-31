@@ -6,9 +6,11 @@ import { useTheme } from "@katachi/style";
 export interface Props {
   className?: string;
   hidden?: boolean;
+  closable?: boolean;
+  onClose?: () => void;
 }
 
-const Header: React.FC<Props> = ({ className, hidden }) => {
+const Header: React.FC<Props> = ({ className, hidden, closable, onClose }) => {
   const theme = useTheme();
 
   return hidden ? null : (
@@ -25,6 +27,25 @@ const Header: React.FC<Props> = ({ className, hidden }) => {
       className={className}
     >
       katachi
+      {closable && (
+        <div
+          css={css`
+            width: 3em;
+            height: 3em;
+            position: absolute;
+            top: 0;
+            right: 0;
+            cursor: pointer;
+            user-select: none;
+            text-align: center;
+            line-height: 3em;
+            color: #888;
+          `}
+          onClick={onClose}
+        >
+          &times;
+        </div>
+      )}
     </div>
   );
 };
