@@ -12,6 +12,7 @@ export interface Props {
   ratio?: number;
   answerRatio?: number;
   onMouseDown?: (e: KonvaEventObject<MouseEvent>) => void;
+  onTouchStart?: (e: KonvaEventObject<TouchEvent>) => void;
 }
 
 const VerticalLineLayer: React.FC<Props> = ({
@@ -21,7 +22,8 @@ const VerticalLineLayer: React.FC<Props> = ({
   y,
   ratio,
   answerRatio,
-  onMouseDown
+  onMouseDown,
+  onTouchStart
 }) =>
   longerLength === 0 || lineLength === 0 ? null : (
     <Layer x={x} y={y}>
@@ -78,6 +80,7 @@ const VerticalLineLayer: React.FC<Props> = ({
         points={[0, -clickablePadding, 0, longerLength + clickablePadding]}
         strokeWidth={clickablePadding}
         onMouseDown={onMouseDown}
+        onTouchStart={onTouchStart}
         stroke="transparent"
       />
     </Layer>
