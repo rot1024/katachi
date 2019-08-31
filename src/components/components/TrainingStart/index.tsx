@@ -1,4 +1,6 @@
-import React, { useState, useCallback } from "react";
+/** @jsx jsx */
+import React, { useState, useCallback, Fragment } from "react";
+import { css, jsx } from "@emotion/core";
 
 import Button from "../Button";
 import Timer, { DisplayStyle } from "../Timer";
@@ -18,17 +20,23 @@ const TrainingStart: React.FC<Props> = ({ className, duration, onStart }) => {
   return (
     <div className={className}>
       {buttonPushed ? (
-        <Timer
-          duration={duration}
-          enabled
-          onTimeUp={onStart}
-          displayStyle={DisplayStyle.Text}
-        />
+        <div
+          css={css`
+            text-align: center;
+          `}
+        >
+          <Timer
+            duration={duration}
+            enabled
+            onTimeUp={onStart}
+            displayStyle={DisplayStyle.Text}
+          />
+        </div>
       ) : (
-        <>
+        <Fragment>
           <div>トレーニングを始める</div>
           <Button onClick={handleClick}>START</Button>
-        </>
+        </Fragment>
       )}
     </div>
   );

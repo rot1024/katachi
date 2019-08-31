@@ -139,18 +139,20 @@ const TrainingPage: React.FC<Props> = ({
               duration={duration}
               onTimeUp={handleTimeUp}
             />
-            {isAnswerShown && scores.current.length > 0 && (
-              <div
-                css={css`
-                  position: absolute;
-                  top: 10px;
-                  left: 50%;
-                  transform: translateX(-50%);
-                `}
-              >
-                <Rating score={scores.current[scores.current.length - 1]} />
-              </div>
-            )}
+            <div
+              css={css`
+                text-align: center;
+                visibility: ${isAnswerShown ? "visible" : "hidden"};
+              `}
+            >
+              <Rating
+                score={
+                  scores.current.length > 0
+                    ? scores.current[scores.current.length - 1]
+                    : 0
+                }
+              />
+            </div>
             <div
               css={css`
                 flex: auto;
