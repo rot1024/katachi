@@ -2,7 +2,7 @@
   "name": "katachi",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://rot1024.github.io/katachi",
+  "homepage": "https://rot1024.github.io/katachi/",
   "dependencies": {
     "@craco/craco": "^5.3.0",
     "@emotion/core": "^10.0.16",
