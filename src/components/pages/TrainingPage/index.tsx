@@ -86,6 +86,7 @@ const TrainingPage: React.FC<Props> = ({
   return (
     <div
       css={css`
+        position: relative;
         padding: 1em;
       `}
       className={className}
