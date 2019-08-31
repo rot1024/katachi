@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "./logo.svg";
+import { hot } from "react-hot-loader/root";
 
 import { GlobalStyle, ThemeProvider } from "./style";
 
@@ -27,4 +27,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default hot(App);
