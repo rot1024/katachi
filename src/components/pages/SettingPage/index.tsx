@@ -23,7 +23,9 @@ const SettingPage: React.FC<Props> = ({ className, onSelect }) => {
     <div
       className={className}
       css={css`
-        background-color: #efefef;
+        width: 100%;
+        height: 100%;
+        background-color: #f0f0f0;
       `}
     >
       <Menu

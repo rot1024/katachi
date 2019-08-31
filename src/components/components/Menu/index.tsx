@@ -48,6 +48,7 @@ const Menu: React.FC<Props> = ({ className, items, onSelect }) => {
               position: relative;
               transition: all ease 0.1s;
               font-size: 0.9rem;
+              border-top: 1px solid #efefef;
 
               &:after {
                 content: ">";
@@ -59,10 +60,6 @@ const Menu: React.FC<Props> = ({ className, items, onSelect }) => {
 
               &:active:after {
                 color: #fff;
-              }
-
-              & + & {
-                border-top: 1px solid #efefef;
               }
 
               &:active {
