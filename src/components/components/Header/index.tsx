@@ -17,8 +17,8 @@ const Header: React.FC<Props> = ({ className, hidden }) => {
         font-size: 1.2rem;
         padding: 0 1em;
         color: ${theme.accent};
-        height: 2em;
-        line-height: 2em;
+        height: 3em;
+        line-height: 3em;
         font-weight: bold;
         text-align: center;
       `}

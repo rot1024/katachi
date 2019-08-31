@@ -51,7 +51,7 @@ const Nav: React.FC<Props> = ({ className, selected, onSelect }) => {
 const Wrapper = styled.div`
   display: flex;
   align-items: stretch;
-  height: 5em;
+  height: 4em;
 `;
 
 const MenuItem = styled.div<{ active?: boolean }>`
@@ -65,6 +65,7 @@ const MenuItem = styled.div<{ active?: boolean }>`
   font-weight: bold;
   color: ${({ active, theme }) => (active ? theme.accent : theme.inactive)};
   flex: 1 1 0;
+  user-select: none;
 `;
 
 const Icon = styled(FontAwesomeIcon)`
