@@ -28,7 +28,8 @@
     "rxjs": "^6.5.2",
     "rxjs-hooks": "^0.5.1",
     "typescript": "3.5.3",
-    "typescript-styled-plugin": "^0.14.0"
+    "typescript-styled-plugin": "^0.14.0",
+    "use-resize-observer": "^4.0.0"
   },
   "scripts": {
     "start": "craco start",
