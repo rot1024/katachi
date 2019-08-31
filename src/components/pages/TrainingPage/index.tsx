@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import React, { useState, useCallback, useMemo, useRef, Fragment } from "react";
 import { jsx, css } from "@emotion/core";
+import useResizeObserver from "use-resize-observer";
 
 import {
   TrainingType,
@@ -29,7 +30,6 @@ export interface Props {
   ) => void;
 }
 
-const screenSize = 500;
 const trainingCount = 10;
 
 const TrainingPage: React.FC<Props> = ({
@@ -45,6 +45,7 @@ const TrainingPage: React.FC<Props> = ({
   const [currentTraining, changeTraining] = useState(0);
   const [currentState, setCurrentState] = useState<number[]>();
   const [isAnswerShown, setAnswerShown] = useState(false);
+  const [resizeRef, width] = useResizeObserver();
 
   const handleAnswer = useCallback(() => {
     if (!trainings || trainings.length <= currentTraining || !currentState)
@@ -88,66 +89,94 @@ const TrainingPage: React.FC<Props> = ({
       css={css`
         position: relative;
         padding: 1em;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
       `}
       className={className}
     >
-      {!started ? (
-        <TrainingStart duration={3000} onStart={handleStart} />
-      ) : trainings.length <= currentTraining ? (
-        <Fragment>
-          <TrainingResult type={type} scores={scores.current} />
-          <Button
-            onClick={() => {
-              if (onFinish) {
-                onFinish(scores.current, type, trainings);
-              }
-            }}
-          >
-            Finish
-          </Button>
-        </Fragment>
-      ) : (
-        <Fragment>
-          <Timer
-            id={currentTraining}
-            enabled={!isAnswerShown}
-            duration={duration}
-            onTimeUp={handleTimeUp}
-          />
-          {isAnswerShown && scores.current.length > 0 && (
-            <div
-              css={css`
-                position: absolute;
-                top: 10px;
-                left: 50%;
-                transform: translateX(-50%);
-              `}
+      <div
+        ref={resizeRef}
+        css={css`
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
+        `}
+      >
+        {!started ? (
+          <TrainingStart duration={3000} onStart={handleStart} />
+        ) : trainings.length <= currentTraining ? (
+          <Fragment>
+            <TrainingResult type={type} scores={scores.current} />
+            <Button
+              onClick={() => {
+                if (onFinish) {
+                  onFinish(scores.current, type, trainings);
+                }
+              }}
             >
-              <Rating score={scores.current[scores.current.length - 1]} />
-            </div>
-          )}
+              Finish
+            </Button>
+          </Fragment>
+        ) : (
           <div
             css={css`
-              text-align: center;
+              width: 100%;
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+              box-sizing: border-box;
             `}
           >
-            <Training
+            <Timer
               css={css`
-                display: inline-block;
+                position: absolute;
+                top: 0;
+                left: 0;
               `}
-              type={type}
-              params={trainings[currentTraining]}
-              screenSize={screenSize}
-              scaleCorrection={scaleCorrection}
-              isAnswerShown={isAnswerShown}
-              disableOperation={isAnswerShown}
-              onUpdate={s => setCurrentState(s)}
+              id={currentTraining}
+              enabled={!isAnswerShown}
+              duration={duration}
+              onTimeUp={handleTimeUp}
             />
+            {isAnswerShown && scores.current.length > 0 && (
+              <div
+                css={css`
+                  position: absolute;
+                  top: 10px;
+                  left: 50%;
+                  transform: translateX(-50%);
+                `}
+              >
+                <Rating score={scores.current[scores.current.length - 1]} />
+              </div>
+            )}
+            <div
+              css={css`
+                flex: auto;
+              `}
+            >
+              <Training
+                type={type}
+                params={trainings[currentTraining]}
+                screenSize={width}
+                scaleCorrection={scaleCorrection}
+                isAnswerShown={isAnswerShown}
+                disableOperation={isAnswerShown}
+                onUpdate={setCurrentState}
+              />
+            </div>
+            <div
+              css={css`
+                margin-top: auto;
+              `}
+            >
+              {isAnswerable && <Button onClick={handleAnswer}>OK</Button>}
+              {isAnswerShown && <Button onClick={handleNext}>Next</Button>}
+            </div>
           </div>
-          {isAnswerable && <Button onClick={handleAnswer}>OK</Button>}
-          {isAnswerShown && <Button onClick={handleNext}>Next</Button>}
-        </Fragment>
-      )}
+        )}
+      </div>
     </div>
   );
 };
