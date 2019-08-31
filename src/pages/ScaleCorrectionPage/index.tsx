@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React from "react";
 import { css, jsx } from "@emotion/core";
-import ScaleCorrector from "@katachi/components/components/ScaleCorrector";
+import ScaleCorrector from "@katachi/components/ScaleCorrector";
 
 export interface Props {
   className?: string;

@@ -4,13 +4,13 @@ import { hot } from "react-hot-loader/root";
 import { css, jsx } from "@emotion/core";
 
 import { GlobalStyle, ThemeProvider } from "./style";
-import AppContainer, { Mode } from "./components/components/AppContainer";
-import HomePage from "./components/pages/HomePage";
-import TrainingMenuPage, { Level } from "./components/pages/TrainingMenuPage";
-import TrainingPage, { TrainingType } from "./components/pages/TrainingPage";
-import ReportPage from "./components/pages/ReportPage";
-import SettingPage, { Item } from "./components/pages/SettingPage";
-import ScaleCorrectionPage from "./components/pages/ScaleCorrectionPage";
+import AppContainer, { Mode } from "./components/AppContainer";
+import HomePage from "./pages/HomePage";
+import TrainingMenuPage, { Level } from "./pages/TrainingMenuPage";
+import TrainingPage, { TrainingType } from "./pages/TrainingPage";
+import ReportPage from "./pages/ReportPage";
+import SettingPage, { Item } from "./pages/SettingPage";
+import ScaleCorrectionPage from "./pages/ScaleCorrectionPage";
 
 enum Route {
   Home,

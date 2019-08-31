@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React from "react";
 import { css, jsx } from "@emotion/core";
-import Menu from "@katachi/components/components/Menu";
+import Menu from "@katachi/components/Menu";
 
 export enum Item {
   ScaleCorrection = "scalecorrection",

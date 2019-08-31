@@ -2,7 +2,7 @@
 import React from "react";
 import { css, jsx } from "@emotion/core";
 
-import Button from "@katachi/components/components/Button";
+import Button from "@katachi/components/Button";
 
 export interface Props {
   className?: string;

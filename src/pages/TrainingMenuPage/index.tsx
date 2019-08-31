@@ -5,7 +5,7 @@ import { jsx } from "@emotion/core";
 import TrainingMenu, {
   TrainingType,
   Level
-} from "@katachi/components/components/TrainingMenu";
+} from "@katachi/components/TrainingMenu";
 export { TrainingType, Level };
 
 export interface Props {

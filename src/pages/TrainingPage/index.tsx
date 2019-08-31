@@ -11,12 +11,12 @@ import {
   getDuration,
   Level
 } from "@katachi/training";
-import Training from "@katachi/components/components/Training";
-import Button from "@katachi/components/components/Button";
-import Timer from "@katachi/components/components/Timer";
-import TrainingStart from "@katachi/components/components/TrainingStart";
-import TrainingResult from "@katachi/components/components/TrainingResult";
-import Rating from "@katachi/components/components/Rating";
+import Training from "@katachi/components/Training";
+import Button from "@katachi/components/Button";
+import Timer from "@katachi/components/Timer";
+import TrainingStart from "@katachi/components/TrainingStart";
+import TrainingResult from "@katachi/components/TrainingResult";
+import Rating from "@katachi/components/Rating";
 
 export { TrainingType, Level };
 
