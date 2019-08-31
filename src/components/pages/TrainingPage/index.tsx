@@ -7,7 +7,9 @@ import {
   TrainingType,
   validateState,
   judgeScore,
-  initTrainings
+  initTrainings,
+  getDuration,
+  Level
 } from "@katachi/training";
 import Training from "@katachi/components/components/Training";
 import Button from "@katachi/components/components/Button";
@@ -16,13 +18,13 @@ import TrainingStart from "@katachi/components/components/TrainingStart";
 import TrainingResult from "@katachi/components/components/TrainingResult";
 import Rating from "@katachi/components/components/Rating";
 
-export { TrainingType };
+export { TrainingType, Level };
 
 export interface Props {
   className?: string;
   type: TrainingType;
   scaleCorrection?: number;
-  duration: number;
+  level: Level;
   onFinish?: (
     scores: number[],
     type: TrainingType,
@@ -37,7 +39,7 @@ const TrainingPage: React.FC<Props> = ({
   className,
   type,
   scaleCorrection,
-  duration,
+  level,
   onFinish
 }) => {
   const scores = useRef<number[]>([]);
@@ -85,6 +87,7 @@ const TrainingPage: React.FC<Props> = ({
 
   if (!trainings) return null;
   const trainingSize = Math.min(width, maxScreenSize);
+  const duration = getDuration(type, level);
 
   return (
     <div
