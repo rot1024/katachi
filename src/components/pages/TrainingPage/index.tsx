@@ -31,6 +31,7 @@ export interface Props {
 }
 
 const trainingCount = 10;
+const maxScreenSize = 500;
 
 const TrainingPage: React.FC<Props> = ({
   className,
@@ -83,6 +84,7 @@ const TrainingPage: React.FC<Props> = ({
   }, []);
 
   if (!trainings) return null;
+  const trainingSize = Math.min(width, maxScreenSize);
 
   return (
     <div
@@ -156,12 +158,17 @@ const TrainingPage: React.FC<Props> = ({
             <div
               css={css`
                 flex: auto;
+                text-align: center;
               `}
             >
               <Training
+                css={css`
+                  margin: 0 auto;
+                  width: ${trainingSize}px;
+                `}
                 type={type}
                 params={trainings[currentTraining]}
-                screenSize={width}
+                screenSize={trainingSize}
                 scaleCorrection={scaleCorrection}
                 isAnswerShown={isAnswerShown}
                 disableOperation={isAnswerShown}
