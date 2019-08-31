@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { KonvaEventObject } from "konva/types/Node";
 import { Stage, Layer, Rect } from "react-konva";
 import { fromEvent, merge } from "rxjs";
@@ -32,6 +32,7 @@ const VerticalLine: React.FC<TrainingProps> = ({
   disableOperation,
   onUpdate
 }) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const lineLength = calcLength(params[0], scaleCorrection);
   const line2Length = calcLength(params[1], scaleCorrection);
   const longerLength = Math.max(lineLength, line2Length);
@@ -62,7 +63,7 @@ const VerticalLine: React.FC<TrainingProps> = ({
     params
   ];
   const [dragStartCallback, statePointRatio2] = useEventCallback<
-    KonvaEventObject<MouseEvent>,
+    KonvaEventObject<MouseEvent | TouchEvent>,
     number | undefined,
     DragStartInputs
   >(
@@ -76,13 +77,33 @@ const VerticalLine: React.FC<TrainingProps> = ({
         event$.pipe(
           withLatestFrom(inputs$),
           filter(([, [, disableOperation]]) => !disableOperation),
-          map(([e]) => [e.evt.y - e.evt.offsetY, e.evt.offsetY]),
-          mergeMap(([e, firstY]) =>
-            fromEvent<MouseEvent>(document, "mousemove").pipe(
+          map(([e]) => [
+            e.evt instanceof TouchEvent
+              ? e.evt.targetTouches[0].pageY
+              : e.evt.pageY,
+            wrapperRef.current
+              ? wrapperRef.current.getBoundingClientRect().top
+              : 0
+          ]),
+          map(([pageY, offsetY]) => [pageY - offsetY, offsetY] as const),
+          mergeMap(([firstY, offsetY]) =>
+            merge(
+              fromEvent<MouseEvent>(document, "mousemove"),
+              fromEvent<TouchEvent>(document, "touchmove")
+            ).pipe(
+              map(
+                e2 =>
+                  (e2 instanceof TouchEvent
+                    ? e2.targetTouches[0].pageY
+                    : e2.pageY) - offsetY
+              ),
               startWith(firstY),
               takeUntil(
                 merge(
-                  fromEvent(document, "mouseup").pipe(
+                  merge(
+                    fromEvent(document, "mouseup"),
+                    fromEvent(document, "touchend")
+                  ).pipe(
                     withLatestFrom(state$, inputs$),
                     tap(([, y, [onUpdate, disableOperation]]) => {
                       if (
@@ -107,7 +128,6 @@ const VerticalLine: React.FC<TrainingProps> = ({
                   )
                 )
               ),
-              map(e2 => (typeof e2 === "number" ? e2 : e2.y - e)),
               withLatestFrom(inputs$),
               map(([y, [, , calcStateFromY]]) => calcStateFromY(y))
             )
@@ -119,27 +139,30 @@ const VerticalLine: React.FC<TrainingProps> = ({
   );
 
   return (
-    <Stage className={className} width={screenSize} height={screenSize}>
-      <Layer>
-        <Rect stroke="#eee" width={screenSize} height={screenSize} />
-      </Layer>
-      <VerticalLineLayer
-        x={screenSize / 3}
-        y={(screenSize - longerLength) / 2}
-        lineLength={line2Length}
-        longerLength={longerLength}
-        ratio={pointRatio}
-      />
-      <VerticalLineLayer
-        x={(screenSize / 3) * 2}
-        y={(screenSize - longerLength) / 2}
-        lineLength={lineLength}
-        longerLength={longerLength}
-        ratio={statePointRatio2 ? statePointRatio2 : undefined}
-        answerRatio={isAnswerShown ? pointRatio : undefined}
-        onMouseDown={dragStartCallback}
-      />
-    </Stage>
+    <div ref={wrapperRef}>
+      <Stage className={className} width={screenSize} height={screenSize}>
+        <Layer>
+          <Rect stroke="#eee" width={screenSize} height={screenSize} />
+        </Layer>
+        <VerticalLineLayer
+          x={screenSize / 3}
+          y={(screenSize - longerLength) / 2}
+          lineLength={line2Length}
+          longerLength={longerLength}
+          ratio={pointRatio}
+        />
+        <VerticalLineLayer
+          x={(screenSize / 3) * 2}
+          y={(screenSize - longerLength) / 2}
+          lineLength={lineLength}
+          longerLength={longerLength}
+          ratio={statePointRatio2 ? statePointRatio2 : undefined}
+          answerRatio={isAnswerShown ? pointRatio : undefined}
+          onMouseDown={dragStartCallback}
+          onTouchStart={dragStartCallback}
+        />
+      </Stage>
+    </div>
   );
 };
 
