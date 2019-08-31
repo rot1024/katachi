@@ -1,8 +1,14 @@
-import { TrainingMenu } from "./common";
+import { TrainingMenu, Level } from "./common";
 
 const verticalLine2: TrainingMenu = {
   paramsSize: 3,
   stateSize: 1,
+  duration: {
+    [Level.Easy]: Infinity,
+    [Level.Normal]: 10000,
+    [Level.Hard]: 3000,
+    [Level.Ultimate]: 1000
+  },
   validateParams: ([barLength, bar2Length, ratio]) =>
     barLength > 0.3 &&
     bar2Length > 0.3 &&

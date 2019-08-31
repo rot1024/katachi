@@ -55,3 +55,7 @@ export const getRating = (score: number) => {
   }
   return Rating.Bad;
 };
+
+export const getDuration = (type: TrainingType, level: Level) => {
+  return trainings[type].duration[level];
+};

@@ -1,6 +1,7 @@
 export interface TrainingMenu {
   paramsSize: number;
   stateSize: number;
+  duration: { [key in Level]: number };
   validateParams: (params: number[]) => number[] | boolean;
   judgeScore: (params: number[], state?: number[]) => number;
 }
