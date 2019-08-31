@@ -7,7 +7,6 @@ export interface TrainingMenu {
 
 export enum Rating {
   Legend = "legend",
-  Perfect = "perfect",
   Excellent = "excellent",
   Good = "good",
   Bad = "bad"

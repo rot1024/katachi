@@ -11,7 +11,6 @@ export interface Props {
 
 const styles: { [key in RatingEnum]: { color: string } } = {
   [RatingEnum.Legend]: { color: "red" },
-  [RatingEnum.Perfect]: { color: "red" },
   [RatingEnum.Excellent]: { color: "red" },
   [RatingEnum.Good]: { color: "red" },
   [RatingEnum.Bad]: { color: "red" }

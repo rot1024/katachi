@@ -8,7 +8,6 @@ storiesOf("Rating", module)
     <div>
       <Component score={1} />
       <Component score={0.9} />
-      <Component score={0.8} />
       <Component score={0.7} />
       <Component score={0.6} />
     </div>
@@ -17,7 +16,6 @@ storiesOf("Rating", module)
     <div>
       <Component small score={1} />
       <Component small score={0.9} />
-      <Component small score={0.8} />
       <Component small score={0.7} />
       <Component small score={0.6} />
     </div>

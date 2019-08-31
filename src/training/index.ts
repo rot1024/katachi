@@ -48,9 +48,6 @@ export const getRating = (score: number) => {
     return Rating.Legend;
   }
   if (score >= 0.9) {
-    return Rating.Perfect;
-  }
-  if (score >= 0.8) {
     return Rating.Excellent;
   }
   if (score >= 0.7) {
