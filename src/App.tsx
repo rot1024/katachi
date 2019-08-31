@@ -1,11 +1,11 @@
 import React from "react";
 import logo from "./logo.svg";
-import { ThemeProvider } from "emotion-theming";
-import { GlobalStyle, theme } from "./style";
+
+import { GlobalStyle, ThemeProvider } from "./style";
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider>
       <GlobalStyle />
       <div className="App">
         <header className="App-header">

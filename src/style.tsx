@@ -1,7 +1,7 @@
 import React, { FC, useContext } from "react";
 import { Global, css, ThemeContext } from "@emotion/core";
 import emotionStyled, { CreateStyled } from "@emotion/styled";
-
+import { ThemeProvider as EmotionThemeProvider } from "emotion-theming";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faShapes,
@@ -73,3 +73,7 @@ export const GlobalStyle: FC = () => (
 export const styled = emotionStyled as CreateStyled<typeof theme>;
 
 export const useTheme = () => useContext<typeof theme>(ThemeContext as any);
+
+export const ThemeProvider: FC = ({ children }) => (
+  <EmotionThemeProvider theme={theme}>{children}</EmotionThemeProvider>
+);
