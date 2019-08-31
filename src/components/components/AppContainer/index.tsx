@@ -12,6 +12,8 @@ export interface Props {
   navHidden?: boolean;
   currentMode?: Mode;
   onModeChange?: (mode: Mode) => void;
+  headerClosable?: boolean;
+  onHeaderClose?: () => void;
 }
 
 const AppContainer: React.FC<Props> = ({
@@ -19,7 +21,9 @@ const AppContainer: React.FC<Props> = ({
   children,
   currentMode,
   navHidden,
-  onModeChange
+  onModeChange,
+  headerClosable,
+  onHeaderClose
 }) => {
   return (
     <div
@@ -31,7 +35,7 @@ const AppContainer: React.FC<Props> = ({
       `}
     >
       <header>
-        <Header />
+        <Header closable={headerClosable} onClose={onHeaderClose} />
       </header>
       <main
         role="main"
