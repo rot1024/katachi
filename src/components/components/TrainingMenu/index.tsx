@@ -5,6 +5,8 @@ import { styled } from "@katachi/style";
 
 import { TrainingType, Level } from "@katachi/training";
 
+export { TrainingType, Level };
+
 const types: ([TrainingType, string])[] = [
   [TrainingType.VerticalLine2, "垂直な棒の比率"]
 ];
