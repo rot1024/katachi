@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export enum Mode {
   Training,
   Report,
-  Config
+  Setting
 }
 
 export interface Props {
@@ -36,8 +36,8 @@ const Nav: React.FC<Props> = ({ className, selected, onSelect }) => {
         </div>
       </MenuItem>
       <MenuItem
-        active={selected === Mode.Config}
-        onClick={() => onSelect && onSelect(Mode.Config)}
+        active={selected === Mode.Setting}
+        onClick={() => onSelect && onSelect(Mode.Setting)}
       >
         <div>
           <Icon icon="sliders-h" />

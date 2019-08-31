@@ -12,6 +12,6 @@ storiesOf("Nav", module)
   .add("report selected", () => (
     <Component onSelect={action("select")} selected={Mode.Report} />
   ))
-  .add("config selected", () => (
-    <Component onSelect={action("select")} selected={Mode.Config} />
+  .add("setting selected", () => (
+    <Component onSelect={action("select")} selected={Mode.Setting} />
   ));
