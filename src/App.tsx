@@ -153,20 +153,20 @@ const App: React.FC = () => {
             }}
           />
         )}
-        {currentRoute === Route.ScaleCorrection ||
-          (currentRoute === Route.ScaleCorrectionFirst && (
-            <ScaleCorrectionPage
-              scaleCorrection={scaleCorrection}
-              onScaleCorrectionEnter={sc => {
-                setScaleCorrection(sc);
-                if (currentRoute === Route.ScaleCorrectionFirst) {
-                  jumpTo(Route.TrainingMenu);
-                } else {
-                  jumpTo(Route.Setting);
-                }
-              }}
-            />
-          ))}
+        {(currentRoute === Route.ScaleCorrection ||
+          currentRoute === Route.ScaleCorrectionFirst) && (
+          <ScaleCorrectionPage
+            scaleCorrection={scaleCorrection}
+            onScaleCorrectionEnter={sc => {
+              setScaleCorrection(sc);
+              if (currentRoute === Route.ScaleCorrectionFirst) {
+                jumpTo(Route.TrainingMenu);
+              } else {
+                jumpTo(Route.Setting);
+              }
+            }}
+          />
+        )}
       </AppContainer>
     </ThemeProvider>
   );
