@@ -7,10 +7,19 @@ export interface Props {
   className?: string;
   hidden?: boolean;
   closable?: boolean;
+  backButtonVisible?: boolean;
   onClose?: () => void;
+  onBackButtonClick?: () => void;
 }
 
-const Header: React.FC<Props> = ({ className, hidden, closable, onClose }) => {
+const Header: React.FC<Props> = ({
+  className,
+  hidden,
+  closable,
+  onClose,
+  backButtonVisible,
+  onBackButtonClick
+}) => {
   const theme = useTheme();
 
   return hidden ? null : (
@@ -26,6 +35,26 @@ const Header: React.FC<Props> = ({ className, hidden, closable, onClose }) => {
       `}
       className={className}
     >
+      {backButtonVisible && (
+        <div
+          css={css`
+            width: 3em;
+            height: 3em;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+            user-select: none;
+            text-align: center;
+            line-height: 3em;
+            color: #888;
+            font-size: 20px;
+          `}
+          onClick={onBackButtonClick}
+        >
+          &lt;
+        </div>
+      )}
       katachi
       {closable && (
         <div
@@ -40,6 +69,7 @@ const Header: React.FC<Props> = ({ className, hidden, closable, onClose }) => {
             text-align: center;
             line-height: 3em;
             color: #888;
+            font-size: 20px;
           `}
           onClick={onClose}
         >

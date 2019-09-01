@@ -14,6 +14,8 @@ export interface Props {
   onModeChange?: (mode: Mode) => void;
   headerClosable?: boolean;
   onHeaderClose?: () => void;
+  headerBackButtonVisible?: boolean;
+  onHeaderBackButtonClick?: () => void;
 }
 
 const AppContainer: React.FC<Props> = ({
@@ -23,7 +25,9 @@ const AppContainer: React.FC<Props> = ({
   navHidden,
   onModeChange,
   headerClosable,
-  onHeaderClose
+  onHeaderClose,
+  headerBackButtonVisible,
+  onHeaderBackButtonClick
 }) => {
   return (
     <div
@@ -35,7 +39,12 @@ const AppContainer: React.FC<Props> = ({
       `}
     >
       <header>
-        <Header closable={headerClosable} onClose={onHeaderClose} />
+        <Header
+          closable={headerClosable}
+          onClose={onHeaderClose}
+          backButtonVisible={headerBackButtonVisible}
+          onBackButtonClick={onHeaderBackButtonClick}
+        />
       </header>
       <main
         role="main"
