@@ -1,9 +1,5 @@
 import { useCallback, useMemo } from "react";
-import {
-  initializeApp,
-  auth as firebaseAuth,
-  database as firebaseDatabase
-} from "firebase";
+import * as firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/database";
 import { authState } from "rxfire/auth";
@@ -14,7 +10,7 @@ import { useObservable } from "rxjs-hooks";
 
 import { TrainingHistory } from "./lib";
 
-const app = initializeApp({
+const app = firebase.initializeApp({
   apiKey: "AIzaSyBkXkX7PIAhCXvnTau7lzrb1AOWbJXoa8I",
   authDomain: "katachi-25f71.firebaseapp.com",
   databaseURL: "https://katachi-25f71.firebaseio.com",
@@ -23,9 +19,9 @@ const app = initializeApp({
   messagingSenderId: "1057352886357",
   appId: "1:1057352886357:web:5e0e73ee245b501c"
 });
-const provider = new firebaseAuth.TwitterAuthProvider();
-const auth = firebaseAuth(app);
-const db = firebaseDatabase(app);
+const provider = new firebase.auth.TwitterAuthProvider();
+const auth = firebase.auth(app);
+const db = firebase.database(app);
 
 export const useAuth = () => {
   const user = useObservable(
@@ -46,7 +42,7 @@ export const useHistories = (user?: string) => {
 
   const histories = useObservable<
     TrainingHistory[],
-    [firebaseDatabase.Reference | undefined]
+    [firebase.database.Reference | undefined]
   >(
     (input$, history$) =>
       input$.pipe(
