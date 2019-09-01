@@ -22,7 +22,7 @@ const TrainingResult: React.FC<Props> = ({ className, scores, type }) => {
       </p>
       <ul>
         {scores.map((s, i) => (
-          <li>
+          <li key={i}>
             <span>
               {i + 1}: {humanReadableScore(s)}
             </span>
