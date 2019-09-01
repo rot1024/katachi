@@ -23,7 +23,7 @@ const ScaleCorrector: React.FC<Props> = ({
   );
   useEffect(() => {
     if (typeof scaleCorrection === "number") {
-      setValue(scaleCorrection);
+      setValue((scaleCorrection - 0.5) * 100);
     }
   }, [scaleCorrection]);
   const sc = value / 100 + 0.5;
