@@ -52,14 +52,12 @@ export const useHistories = (user?: string) => {
     TrainingHistory[],
     [firebase.database.Reference | undefined]
   >(
-    (input$, history$) =>
+    input$ =>
       input$.pipe(
         mergeMap(([ref]) =>
           ref
             ? list(ref).pipe(
-                withLatestFrom(history$),
-                map(([changes, histories]) => [
-                  ...histories,
+                map(changes => [
                   ...changes
                     .map(c => [c.snapshot.key, c.snapshot.val()] as const)
                     .map<TrainingHistory>(([, h]) => ({
