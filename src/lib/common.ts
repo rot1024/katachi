@@ -34,3 +34,10 @@ export enum TrainingType {
   // Ellipse = "ellipse",
   // EllipseMultiple = "ellipseMultiple"
 }
+
+export interface TrainingHistory {
+  datetime: Date;
+  type: TrainingType;
+  params: number[];
+  scores: number[];
+}
