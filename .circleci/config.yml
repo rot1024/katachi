@@ -16,23 +16,21 @@ jobs:
       - run:
           name: Install Dependencies
           command: yarn
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
       - run:
           name: Lint
           command: yarn lint
       - run:
           name: Test
           command: yarn test
-      - run:
-          name: Build
-          command: yarn build
-      - save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
-          paths:
-            - ~/.cache/yarn
       - deploy:
           name: Deploy
           command: |
             if [ "${CIRCLE_BRANCH}" == "${DEPLOY_BRANCH}" ]; then
+              yarn build
               yarn deploy
             fi
