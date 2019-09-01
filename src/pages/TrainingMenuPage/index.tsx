@@ -2,18 +2,15 @@
 import React from "react";
 import { jsx } from "@emotion/core";
 
-import TrainingMenu, {
-  TrainingType,
-  Level
-} from "@katachi/components/TrainingMenu";
-export { TrainingType, Level };
+import TrainingMenu, { TrainingType } from "@katachi/components/TrainingMenu";
+export { TrainingType };
 
 export interface Props {
   className?: string;
-  onSelect?: (type: TrainingType, level: Level) => void;
+  onSelect?: (type: TrainingType) => void;
 }
 
-const TrainingPageMenu: React.FC<Props> = ({ className, onSelect }) => {
+const TrainingMenuPage: React.FC<Props> = ({ className, onSelect }) => {
   return (
     <div className={className}>
       <TrainingMenu onSelect={onSelect} />
@@ -21,4 +18,4 @@ const TrainingPageMenu: React.FC<Props> = ({ className, onSelect }) => {
   );
 };
 
-export default TrainingPageMenu;
+export default TrainingMenuPage;

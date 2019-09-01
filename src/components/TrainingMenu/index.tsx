@@ -1,65 +1,34 @@
 /** @jsx jsx */
-import React, { useCallback, useState, Fragment } from "react";
+import React, { useCallback } from "react";
 import { jsx } from "@emotion/core";
 import { styled } from "@katachi/style";
 
-import { TrainingType, Level } from "@katachi/lib";
+import { TrainingType } from "@katachi/lib";
 
-export { TrainingType, Level };
+export { TrainingType };
 
 const types: ([TrainingType, string])[] = [
   [TrainingType.VerticalLine2, "垂直な棒の比率"]
 ];
-const levels: [Level, string][] = [
-  [Level.Easy, "Easy"],
-  [Level.Normal, "Normal"],
-  [Level.Hard, "Hard"],
-  [Level.Ultimate, "Ultimate"]
-];
 
 export interface Props {
   className?: string;
-  onSelect?: (type: TrainingType, level: Level) => void;
+  onSelect?: (type: TrainingType) => void;
 }
 
 const TrainingMenu: React.FC<Props> = ({ className, onSelect }) => {
-  const [selectedType, selectType] = useState<TrainingType>();
-
   const handleTypeClick = useCallback(
-    (type?: TrainingType) => () => {
-      console.log("ok");
-      selectType(type);
-    },
-    []
-  );
-
-  const handleLevelClick = useCallback(
-    (level: Level) => () => {
-      if (onSelect && selectedType) {
-        onSelect(selectedType, level);
-      }
-    },
-    [onSelect, selectedType]
+    (type: TrainingType) => (onSelect ? () => onSelect(type) : undefined),
+    [onSelect]
   );
 
   return (
     <div className={className}>
-      {typeof selectedType === "undefined" ? (
-        types.map(([type, label]) => (
-          <MenuItem key={type} onClick={handleTypeClick(type)}>
-            {label}
-          </MenuItem>
-        ))
-      ) : (
-        <Fragment>
-          <MenuItem onClick={handleTypeClick()}>Back</MenuItem>
-          {levels.map(([level, label]) => (
-            <MenuItem key={level} onClick={handleLevelClick(level)}>
-              {label}
-            </MenuItem>
-          ))}
-        </Fragment>
-      )}
+      {types.map(([type, label]) => (
+        <MenuItem key={type} onClick={handleTypeClick(type)}>
+          {label}
+        </MenuItem>
+      ))}
     </div>
   );
 };
@@ -70,8 +39,8 @@ const MenuItem = styled.div<{ bgcolor?: string }>`
   justify-content: center;
   max-width: 200px;
   max-height: 200px;
-  width: 50vw;
-  height: 50vw;
+  width: calc(50vw - 0.6em);
+  height: calc(50vw - 0.6em);
   vertical-align: middle;
   user-select: none;
   border-radius: 0.5em;

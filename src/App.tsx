@@ -6,8 +6,10 @@ import { css, jsx } from "@emotion/core";
 import { GlobalStyle, ThemeProvider } from "./style";
 import AppContainer, { Mode } from "./components/AppContainer";
 import HomePage from "./pages/HomePage";
-import TrainingMenuPage, { Level } from "./pages/TrainingMenuPage";
-import TrainingPage, { TrainingType } from "./pages/TrainingPage";
+import { TrainingType, Level } from "./lib";
+import TrainingMenuPage from "./pages/TrainingMenuPage";
+import TrainingLevelMenuPage from "./pages/TrainingLevelMenuPage";
+import TrainingPage from "./pages/TrainingPage";
 import ReportPage from "./pages/ReportPage";
 import SettingPage, { Item } from "./pages/SettingPage";
 import ScaleCorrectionPage from "./pages/ScaleCorrectionPage";
@@ -15,6 +17,7 @@ import ScaleCorrectionPage from "./pages/ScaleCorrectionPage";
 enum Route {
   Home,
   TrainingMenu,
+  TrainingLevel,
   Training,
   Report,
   Setting,
@@ -24,7 +27,7 @@ enum Route {
 const App: React.FC = () => {
   const [currentRoute, jumpTo] = useState<Route>(Route.Home);
   const [scaleCorrection, setScaleCorrection] = useState(1);
-  const [training, setTraining] = useState<[TrainingType, Level]>();
+  const [training, setTraining] = useState<[TrainingType, Level | undefined]>();
 
   return (
     <ThemeProvider>
@@ -35,7 +38,9 @@ const App: React.FC = () => {
           height: 100%;
         `}
         currentMode={
-          currentRoute === Route.Training || currentRoute === Route.TrainingMenu
+          currentRoute === Route.Training ||
+          currentRoute === Route.TrainingMenu ||
+          currentRoute === Route.TrainingLevel
             ? Mode.Training
             : currentRoute === Route.Report
             ? Mode.Report
@@ -62,6 +67,18 @@ const App: React.FC = () => {
           jumpTo(Route.TrainingMenu);
           setTraining(undefined);
         }}
+        headerBackButtonVisible={
+          currentRoute === Route.TrainingLevel ||
+          currentRoute === Route.ScaleCorrection
+        }
+        onHeaderBackButtonClick={() => {
+          if (currentRoute === Route.TrainingLevel) {
+            jumpTo(Route.TrainingMenu);
+          }
+          if (currentRoute === Route.ScaleCorrection) {
+            jumpTo(Route.Setting);
+          }
+        }}
       >
         {currentRoute === Route.Home && (
           <HomePage
@@ -72,13 +89,21 @@ const App: React.FC = () => {
         )}
         {currentRoute === Route.TrainingMenu && (
           <TrainingMenuPage
-            onSelect={(type, level) => {
-              setTraining([type, level]);
+            onSelect={type => {
+              setTraining([type, undefined]);
+              jumpTo(Route.TrainingLevel);
+            }}
+          />
+        )}
+        {currentRoute === Route.TrainingLevel && (
+          <TrainingLevelMenuPage
+            onSelect={level => {
+              setTraining(s => (s ? [s[0], level] : undefined));
               jumpTo(Route.Training);
             }}
           />
         )}
-        {currentRoute === Route.Training && training && (
+        {currentRoute === Route.Training && training && training[1] && (
           <TrainingPage
             type={training[0]}
             level={training[1]}
@@ -95,14 +120,15 @@ const App: React.FC = () => {
               if (mode === Item.ScaleCorrection) {
                 jumpTo(Route.ScaleCorrection);
               }
-              // if (mode === Item.SignOut) {
-              //   jumpTo(Route.Home);
-              // }
+              if (mode === Item.SignOut) {
+                jumpTo(Route.Home);
+              }
             }}
           />
         )}
         {currentRoute === Route.ScaleCorrection && (
           <ScaleCorrectionPage
+            scaleCorrection={scaleCorrection}
             onScaleCorrectionEnter={sc => {
               setScaleCorrection(sc);
               jumpTo(Route.Setting);
