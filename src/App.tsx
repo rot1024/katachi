@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { hot } from "react-hot-loader/root";
 import { css, jsx } from "@emotion/core";
 
@@ -7,6 +7,7 @@ import { GlobalStyle, ThemeProvider } from "./style";
 import AppContainer, { Mode } from "./components/AppContainer";
 import HomePage from "./pages/HomePage";
 import { TrainingType, Level } from "./lib";
+import { clamp } from "./util";
 import TrainingMenuPage from "./pages/TrainingMenuPage";
 import TrainingLevelMenuPage from "./pages/TrainingLevelMenuPage";
 import TrainingPage from "./pages/TrainingPage";
@@ -21,13 +22,29 @@ enum Route {
   Training,
   Report,
   Setting,
-  ScaleCorrection
+  ScaleCorrection,
+  ScaleCorrectionFirst
 }
 
+const scaleCorrectionKey = "katachi.scaleCorrection";
+
 const App: React.FC = () => {
+  const initialScaleCorrection = useMemo(() => {
+    const scstr = localStorage.getItem(scaleCorrectionKey);
+    return scstr ? clamp(1, 0, parseFloat(scstr)) : undefined;
+  }, []);
   const [currentRoute, jumpTo] = useState<Route>(Route.Home);
-  const [scaleCorrection, setScaleCorrection] = useState(1);
+  const [scaleCorrection, setScaleCorrection] = useState(
+    initialScaleCorrection || 1
+  );
   const [training, setTraining] = useState<[TrainingType, Level | undefined]>();
+  useEffect(() => {
+    if (scaleCorrection) {
+      localStorage.setItem(scaleCorrectionKey, scaleCorrection.toString());
+    } else {
+      localStorage.removeItem(scaleCorrectionKey);
+    }
+  }, [scaleCorrection]);
 
   return (
     <ThemeProvider>
@@ -44,12 +61,15 @@ const App: React.FC = () => {
             ? Mode.Training
             : currentRoute === Route.Report
             ? Mode.Report
-            : currentRoute === Route.Setting
+            : currentRoute === Route.Setting ||
+              currentRoute === Route.ScaleCorrection
             ? Mode.Setting
             : undefined
         }
         navHidden={
-          currentRoute === Route.Home || currentRoute === Route.Training
+          currentRoute === Route.Home ||
+          currentRoute === Route.Training ||
+          currentRoute === Route.ScaleCorrectionFirst
         }
         onModeChange={mode => {
           if (mode === Mode.Training) {
@@ -83,7 +103,11 @@ const App: React.FC = () => {
         {currentRoute === Route.Home && (
           <HomePage
             onSignIn={() => {
-              jumpTo(Route.TrainingMenu);
+              if (!initialScaleCorrection) {
+                jumpTo(Route.ScaleCorrectionFirst);
+              } else {
+                jumpTo(Route.TrainingMenu);
+              }
             }}
           />
         )}
@@ -129,15 +153,20 @@ const App: React.FC = () => {
             }}
           />
         )}
-        {currentRoute === Route.ScaleCorrection && (
-          <ScaleCorrectionPage
-            scaleCorrection={scaleCorrection}
-            onScaleCorrectionEnter={sc => {
-              setScaleCorrection(sc);
-              jumpTo(Route.Setting);
-            }}
-          />
-        )}
+        {currentRoute === Route.ScaleCorrection ||
+          (currentRoute === Route.ScaleCorrectionFirst && (
+            <ScaleCorrectionPage
+              scaleCorrection={scaleCorrection}
+              onScaleCorrectionEnter={sc => {
+                setScaleCorrection(sc);
+                if (currentRoute === Route.ScaleCorrectionFirst) {
+                  jumpTo(Route.TrainingMenu);
+                } else {
+                  jumpTo(Route.Setting);
+                }
+              }}
+            />
+          ))}
       </AppContainer>
     </ThemeProvider>
   );
