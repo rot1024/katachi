@@ -3,9 +3,6 @@ jobs:
   build:
     environment:
       NODE_IMAGE_VERSION: '12'
-      DEPLOY_BRANCH: master
-      GIT_EMAIL: aayhrot@gmail.com
-      GIT_USER: rot1024
     docker:
       - image: circleci/node:"${NODE_IMAGE_VERSION}"
     working_directory: ~/repo
@@ -29,12 +26,42 @@ jobs:
       # - run:
       #     name: Test
       #     command: yarn test
-      - deploy:
-          name: Deploy
+  deploy:
+    environment:
+      NODE_IMAGE_VERSION: '12'
+      GIT_EMAIL: aayhrot@gmail.com
+      GIT_USER: rot1024
+    docker:
+      - image: circleci/node:"${NODE_IMAGE_VERSION}"
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn
+      - run:
+          name: Set up git config
           command: |
-            if [ "${CIRCLE_BRANCH}" == "${DEPLOY_BRANCH}" ]; then
-              git config --global user.email $GIT_EMAIL
-              git config --global user.name $GIT_USER
-              yarn build
-              yarn deploy
-            fi
+            git config --global user.email $GIT_EMAIL
+            git config --global user.name $GIT_USER
+      - run:
+          name: Build
+          command: yarn build
+      - run:
+          name: Deploy
+          command: yarn deploy
+workflows:
+  version: 2
+  workflow:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
