@@ -2,7 +2,12 @@ import React from "react";
 import { KonvaEventObject } from "konva/types/Node";
 import { Line, Layer } from "react-konva";
 
-import { whiskerLength, strokeWith, clickablePadding } from "./constants";
+import {
+  whiskerLength,
+  strokeWith,
+  clickablePaddingW,
+  clickablePaddingH
+} from "./constants";
 
 export interface Props {
   longerLength: number;
@@ -77,8 +82,8 @@ const VerticalLineLayer: React.FC<Props> = ({
         />
       )}
       <Line
-        points={[0, -clickablePadding, 0, longerLength + clickablePadding]}
-        strokeWidth={clickablePadding}
+        points={[0, -clickablePaddingH, 0, longerLength + clickablePaddingH]}
+        strokeWidth={clickablePaddingW}
         onMouseDown={onMouseDown}
         onTouchStart={onTouchStart}
         stroke="transparent"
