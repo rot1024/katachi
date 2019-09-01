@@ -39,6 +39,6 @@ export enum TrainingType {
 export interface TrainingHistory {
   datetime: Date;
   type: TrainingType;
-  params: number[];
+  params: number[][];
   scores: number[];
 }

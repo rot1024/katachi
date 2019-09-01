@@ -108,6 +108,9 @@ const App: React.FC = () => {
             type={training[0]}
             level={training[1]}
             scaleCorrection={scaleCorrection}
+            onResult={() => {
+              // send data
+            }}
             onFinish={() => {
               jumpTo(Route.TrainingMenu);
             }}

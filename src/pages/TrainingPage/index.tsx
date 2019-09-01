@@ -9,7 +9,8 @@ import {
   judgeScore,
   initTrainings,
   getDuration,
-  Level
+  Level,
+  TrainingHistory
 } from "@katachi/lib";
 import Training from "@katachi/components/Training";
 import Button from "@katachi/components/Button";
@@ -25,11 +26,8 @@ export interface Props {
   type: TrainingType;
   scaleCorrection?: number;
   level: Level;
-  onFinish?: (
-    scores: number[],
-    type: TrainingType,
-    trainings: number[][]
-  ) => void;
+  onResult?: (history: TrainingHistory) => void;
+  onFinish?: () => void;
 }
 
 const trainingCount = 10;
@@ -40,8 +38,10 @@ const TrainingPage: React.FC<Props> = ({
   type,
   scaleCorrection,
   level,
+  onResult,
   onFinish
 }) => {
+  const finishedAt = useRef<Date>();
   const scores = useRef<number[]>([]);
   const trainings = useMemo(() => initTrainings(type, trainingCount), [type]);
   const [started, setStarted] = useState(false);
@@ -62,8 +62,21 @@ const TrainingPage: React.FC<Props> = ({
     if (!trainings) return;
     setAnswerShown(false);
     setCurrentState(undefined);
-    changeTraining(i => i + 1);
-  }, [trainings]);
+    changeTraining(currentTraining + 1);
+    if (
+      trainings.length <= currentTraining &&
+      onResult &&
+      !finishedAt.current
+    ) {
+      finishedAt.current = new Date();
+      onResult({
+        datetime: finishedAt.current,
+        scores: scores.current,
+        type,
+        params: trainings
+      });
+    }
+  }, [currentTraining, onResult, trainings, type]);
 
   const isAnswerable = useMemo(
     () => !isAnswerShown && currentState && validateState(type, currentState),
@@ -116,7 +129,7 @@ const TrainingPage: React.FC<Props> = ({
             <Button
               onClick={() => {
                 if (onFinish) {
-                  onFinish(scores.current, type, trainings);
+                  onFinish();
                 }
               }}
             >
