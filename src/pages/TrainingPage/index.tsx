@@ -42,6 +42,7 @@ const TrainingPage: React.FC<Props> = ({
   onFinish
 }) => {
   const finishedAt = useRef<Date>();
+  const status = useRef<number[][]>([]);
   const scores = useRef<number[]>([]);
   const trainings = useMemo(() => initTrainings(type, trainingCount), [type]);
   const [started, setStarted] = useState(false);
@@ -55,6 +56,7 @@ const TrainingPage: React.FC<Props> = ({
       return;
     const score = judgeScore(type, trainings[currentTraining], currentState);
     scores.current = [...scores.current, score];
+    status.current = [...status.current, currentState];
     setAnswerShown(true);
   }, [currentState, currentTraining, trainings, type]);
 
@@ -73,7 +75,8 @@ const TrainingPage: React.FC<Props> = ({
         datetime: finishedAt.current,
         scores: scores.current,
         type,
-        params: trainings
+        params: trainings,
+        state: status.current
       });
     }
   }, [currentTraining, onResult, trainings, type]);
@@ -200,7 +203,13 @@ const TrainingPage: React.FC<Props> = ({
               `}
             >
               {isAnswerable && <Button onClick={handleAnswer}>OK</Button>}
-              {isAnswerShown && <Button onClick={handleNext}>Next</Button>}
+              {isAnswerShown && (
+                <Button onClick={handleNext}>
+                  {trainings.length - 1 <= currentTraining
+                    ? "Check Result"
+                    : "Next"}
+                </Button>
+              )}
             </div>
           </div>
         )}

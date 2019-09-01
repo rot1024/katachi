@@ -11,13 +11,15 @@ storiesOf("History", module).add("default", () => (
         type: TrainingType.VerticalLine2,
         params: [[0.1, 0.5, 0.9], [0.1, 0.5, 0.9], [0.1, 0.5, 0.9]],
         scores: [0.9, 0.8, 0.7],
-        datetime: new Date()
+        datetime: new Date(),
+        state: [[0.1], [0.2], [0.3]]
       },
       {
         type: TrainingType.VerticalLine2,
         params: [[0.1, 0.5, 0.9], [0.1, 0.5, 0.9], [0.1, 0.5, 0.9]],
         scores: [0.9, 0.8, 0.7],
-        datetime: new Date()
+        datetime: new Date(),
+        state: [[0.1], [0.2], [0.3]]
       }
     ]}
   />

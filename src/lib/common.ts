@@ -40,5 +40,6 @@ export interface TrainingHistory {
   datetime: Date;
   type: TrainingType;
   params: number[][];
+  state: number[][];
   scores: number[];
 }

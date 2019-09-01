@@ -64,7 +64,8 @@ export const useHistories = (user?: string) => {
                       datetime: new Date(h.datetime),
                       type: h.type,
                       params: h.params,
-                      scores: h.scores
+                      scores: h.scores,
+                      state: h.state
                     }))
                 ])
               )
@@ -83,7 +84,8 @@ export const useHistories = (user?: string) => {
               datetime: h.datetime.getTime(),
               type: h.type,
               params: h.params,
-              scores: h.scores
+              scores: h.scores,
+              state: h.state
             })
             .then(() => {})
         : Promise.reject(),
