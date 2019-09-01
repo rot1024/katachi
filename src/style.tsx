@@ -36,6 +36,10 @@ const globalCSS = css`
     height: 100%;
     overflow: hidden;
   }
+
+  html {
+    position: fixed;
+  }
 `;
 
 export const styled = emotionStyled as CreateStyled<typeof theme>;
