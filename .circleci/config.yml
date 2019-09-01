@@ -24,9 +24,9 @@ jobs:
       - run:
           name: Lint
           command: yarn lint
-      - run:
-          name: Test
-          command: yarn test
+      # - run:
+      #     name: Test
+      #     command: yarn test
       - deploy:
           name: Deploy
           command: |
