@@ -49,6 +49,7 @@ const AppContainer: React.FC<Props> = ({
       <main
         role="main"
         css={css`
+          position: relative;
           flex: auto;
           overflow: hidden;
           overflow-y: auto;
