@@ -1,6 +1,7 @@
 import { TrainingMenu, Level } from "./common";
 
 const verticalLine2: TrainingMenu = {
+  title: "垂直な棒の比率",
   paramsSize: 3,
   stateSize: 1,
   duration: {

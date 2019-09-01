@@ -1,4 +1,5 @@
 export interface TrainingMenu {
+  title: string;
   paramsSize: number;
   stateSize: number;
   duration: { [key in Level]: number };

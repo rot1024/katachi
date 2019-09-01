@@ -1,15 +1,11 @@
 /** @jsx jsx */
 import React, { useCallback } from "react";
 import { jsx } from "@emotion/core";
-import { styled } from "@katachi/style";
 
-import { TrainingType } from "@katachi/lib";
+import { styled } from "@katachi/style";
+import { TrainingType, allTrainingTypes, getTitle } from "@katachi/lib";
 
 export { TrainingType };
-
-const types: ([TrainingType, string])[] = [
-  [TrainingType.VerticalLine2, "垂直な棒の比率"]
-];
 
 export interface Props {
   className?: string;
@@ -24,9 +20,9 @@ const TrainingMenu: React.FC<Props> = ({ className, onSelect }) => {
 
   return (
     <div className={className}>
-      {types.map(([type, label]) => (
+      {allTrainingTypes().map(type => (
         <MenuItem key={type} onClick={handleTypeClick(type)}>
-          {label}
+          {getTitle(type)}
         </MenuItem>
       ))}
     </div>

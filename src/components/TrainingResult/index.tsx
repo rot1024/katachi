@@ -1,5 +1,5 @@
 import React from "react";
-import { TrainingType } from "@katachi/lib";
+import { TrainingType, getTitle } from "@katachi/lib";
 
 import Rating from "../Rating";
 
@@ -18,7 +18,7 @@ const TrainingResult: React.FC<Props> = ({ className, scores, type }) => {
     scores.length > 0 ? scores.reduce((a, b) => a + b, 0) / scores.length : 0;
   return (
     <div className={className}>
-      <h1>{type}</h1>
+      <h1>{getTitle(type)}</h1>
       <p>
         Total: {humanReadableScore(totalScore)} <Rating score={totalScore} />
       </p>

@@ -8,6 +8,9 @@ const trainings: { [key in TrainingType]: TrainingMenu } = {
   [TrainingType.VerticalLine2]: verticalLine2
 };
 
+export const allTrainingTypes = (): TrainingType[] =>
+  Object.keys(trainings) as any;
+
 export const initTrainings = (
   type: TrainingType,
   count: number
@@ -58,4 +61,8 @@ export const getRating = (score: number) => {
 
 export const getDuration = (type: TrainingType, level: Level) => {
   return trainings[type].duration[level];
+};
+
+export const getTitle = (type: TrainingType) => {
+  return trainings[type].title;
 };
