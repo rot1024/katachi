@@ -8,6 +8,7 @@ import AppContainer, { Mode } from "./components/AppContainer";
 import HomePage from "./pages/HomePage";
 import { TrainingType, Level } from "./lib";
 import { clamp } from "./util";
+import { useAuth, useHistories } from "./db";
 import TrainingMenuPage from "./pages/TrainingMenuPage";
 import TrainingLevelMenuPage from "./pages/TrainingLevelMenuPage";
 import TrainingPage from "./pages/TrainingPage";
@@ -31,9 +32,8 @@ const scaleCorrectionKey = "katachi.scaleCorrection";
 const App: React.FC = () => {
   const initialScaleCorrection = useMemo(() => {
     const scstr = localStorage.getItem(scaleCorrectionKey);
-    return scstr ? clamp(1, 0, parseFloat(scstr)) : undefined;
+    return scstr ? clamp(2, 0, parseFloat(scstr)) : undefined;
   }, []);
-  const [currentRoute, jumpTo] = useState<Route>(Route.Home);
   const [scaleCorrection, setScaleCorrection] = useState(
     initialScaleCorrection || 1
   );
@@ -45,6 +45,16 @@ const App: React.FC = () => {
       localStorage.removeItem(scaleCorrectionKey);
     }
   }, [scaleCorrection]);
+
+  const [user, signIn, signOut] = useAuth();
+  const [histories, addHistory] = useHistories(user);
+  const [currentRoute, jumpTo] = useState<Route>(
+    user
+      ? scaleCorrection
+        ? Route.TrainingMenu
+        : Route.ScaleCorrectionFirst
+      : Route.Home
+  );
 
   return (
     <ThemeProvider>
@@ -103,11 +113,7 @@ const App: React.FC = () => {
         {currentRoute === Route.Home && (
           <HomePage
             onSignIn={() => {
-              if (!initialScaleCorrection) {
-                jumpTo(Route.ScaleCorrectionFirst);
-              } else {
-                jumpTo(Route.TrainingMenu);
-              }
+              signIn();
             }}
           />
         )}
@@ -132,15 +138,15 @@ const App: React.FC = () => {
             type={training[0]}
             level={training[1]}
             scaleCorrection={scaleCorrection}
-            onResult={() => {
-              // send data
+            onResult={h => {
+              addHistory(h);
             }}
             onFinish={() => {
               jumpTo(Route.TrainingMenu);
             }}
           />
         )}
-        {currentRoute === Route.Report && <ReportPage />}
+        {currentRoute === Route.Report && <ReportPage histories={histories} />}
         {currentRoute === Route.Setting && (
           <SettingPage
             onSelect={mode => {
@@ -148,6 +154,7 @@ const App: React.FC = () => {
                 jumpTo(Route.ScaleCorrection);
               }
               if (mode === Item.SignOut) {
+                signOut();
                 jumpTo(Route.Home);
               }
             }}
