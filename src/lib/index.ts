@@ -44,7 +44,7 @@ export const judgeScore = (
 ) => trainings[type].judgeScore(params, state);
 
 export const getRating = (score: number) => {
-  if (score === 1) {
+  if (score >= 0.98) {
     return Rating.Legend;
   }
   if (score >= 0.9) {
