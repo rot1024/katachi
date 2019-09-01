@@ -105,11 +105,12 @@ const TrainingPage: React.FC<Props> = ({
   return (
     <div
       css={css`
-        position: relative;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         padding: 1em;
-        width: 100%;
-        height: 100%;
-        box-sizing: border-box;
       `}
       className={className}
     >
