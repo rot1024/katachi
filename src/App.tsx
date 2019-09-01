@@ -8,7 +8,7 @@ import AppContainer, { Mode } from "./components/AppContainer";
 import HomePage from "./pages/HomePage";
 import { TrainingType, Level } from "./lib";
 import { clamp } from "./util";
-import { useAuth, useHistories } from "./db";
+import { useAuth, useHistories, AuthState } from "./db";
 import TrainingMenuPage from "./pages/TrainingMenuPage";
 import TrainingLevelMenuPage from "./pages/TrainingLevelMenuPage";
 import TrainingPage from "./pages/TrainingPage";
@@ -47,14 +47,17 @@ const App: React.FC = () => {
   }, [scaleCorrection]);
 
   const [user, signIn, signOut] = useAuth();
-  const [histories, addHistory] = useHistories(user);
-  const [currentRoute, jumpTo] = useState<Route>(
-    user
-      ? scaleCorrection
-        ? Route.TrainingMenu
-        : Route.ScaleCorrectionFirst
-      : Route.Home
+  const [histories, addHistory] = useHistories(
+    typeof user === "string" ? user : undefined
   );
+  const [currentRoute, jumpTo] = useState<Route>(Route.Home);
+  useEffect(() => {
+    if (typeof user === "string" && currentRoute === Route.Home) {
+      jumpTo(
+        initialScaleCorrection ? Route.TrainingMenu : Route.ScaleCorrectionFirst
+      );
+    }
+  }, [currentRoute, initialScaleCorrection, user]);
 
   return (
     <ThemeProvider>
@@ -110,7 +113,7 @@ const App: React.FC = () => {
           }
         }}
       >
-        {currentRoute === Route.Home && (
+        {currentRoute === Route.Home && user === AuthState.SignedOut && (
           <HomePage
             onSignIn={() => {
               signIn();
@@ -149,12 +152,12 @@ const App: React.FC = () => {
         {currentRoute === Route.Report && <ReportPage histories={histories} />}
         {currentRoute === Route.Setting && (
           <SettingPage
-            onSelect={mode => {
+            onSelect={async mode => {
               if (mode === Item.ScaleCorrection) {
                 jumpTo(Route.ScaleCorrection);
               }
               if (mode === Item.SignOut) {
-                signOut();
+                await signOut();
                 jumpTo(Route.Home);
               }
             }}

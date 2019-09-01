@@ -23,13 +23,21 @@ const provider = new firebase.auth.TwitterAuthProvider();
 const auth = firebase.auth(app);
 const db = firebase.database(app);
 
+export enum AuthState {
+  Loading,
+  SignedOut
+}
+
 export const useAuth = () => {
-  const user = useObservable(
-    () => authState(auth).pipe(map(user => (user ? user.uid : undefined))),
-    undefined
+  const user = useObservable<string | AuthState>(
+    () =>
+      authState(auth).pipe(
+        map(user => (user ? user.uid : AuthState.SignedOut))
+      ),
+    AuthState.Loading
   );
-  const signIn = () => auth.signInWithRedirect(provider);
-  const signOut = () => auth.signOut();
+  const signIn = useCallback(() => auth.signInWithRedirect(provider), []);
+  const signOut = useCallback(() => auth.signOut(), []);
   return [user, signIn, signOut] as const;
 };
 
