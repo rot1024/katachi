@@ -27,6 +27,7 @@ const StyledButton = styled.button`
   padding: 1em 3em;
   box-shadow: 0 0.1em 0.5em #00000030;
   cursor: pointer;
+  user-select: none;
   transition: all ease 0.1s;
 
   &:hover {
