@@ -1,6 +1,6 @@
 import React from "react";
 
-import { TrainingType } from "@katachi/training";
+import { TrainingType } from "@katachi/lib";
 import { TrainingProps } from "./common";
 import VerticalLine from "./VerticalLine";
 

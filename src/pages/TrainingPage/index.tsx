@@ -10,7 +10,7 @@ import {
   initTrainings,
   getDuration,
   Level
-} from "@katachi/training";
+} from "@katachi/lib";
 import Training from "@katachi/components/Training";
 import Button from "@katachi/components/Button";
 import Timer from "@katachi/components/Timer";

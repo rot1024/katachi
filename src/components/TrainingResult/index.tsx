@@ -1,5 +1,5 @@
 import React from "react";
-import { TrainingType } from "@katachi/training";
+import { TrainingType } from "@katachi/lib";
 
 import Rating from "../Rating";
 

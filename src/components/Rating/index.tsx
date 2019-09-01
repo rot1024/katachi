@@ -1,7 +1,7 @@
 import React from "react";
 import { styled } from "@katachi/style";
 
-import { getRating, Rating as RatingEnum } from "@katachi/training";
+import { getRating, Rating as RatingEnum } from "@katachi/lib";
 
 export interface Props {
   className?: string;

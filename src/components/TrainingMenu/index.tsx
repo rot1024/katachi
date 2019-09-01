@@ -3,7 +3,7 @@ import React, { useCallback, useState, Fragment } from "react";
 import { jsx } from "@emotion/core";
 import { styled } from "@katachi/style";
 
-import { TrainingType, Level } from "@katachi/training";
+import { TrainingType, Level } from "@katachi/lib";
 
 export { TrainingType, Level };
 
