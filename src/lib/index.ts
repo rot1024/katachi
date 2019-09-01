@@ -11,6 +11,8 @@ const trainings: { [key in TrainingType]: TrainingMenu } = {
 export const allTrainingTypes = (): TrainingType[] =>
   Object.keys(trainings) as any;
 
+export const humanReadableScore = (score: number) => Math.round(score * 100);
+
 export const initTrainings = (
   type: TrainingType,
   count: number

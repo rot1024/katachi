@@ -1,5 +1,5 @@
 import React from "react";
-import { TrainingType, getTitle } from "@katachi/lib";
+import { TrainingType, getTitle, humanReadableScore } from "@katachi/lib";
 
 import Rating from "../Rating";
 
@@ -10,8 +10,6 @@ export interface Props {
   type: TrainingType;
   scores: number[];
 }
-
-const humanReadableScore = (score: number) => Math.round(score * 100);
 
 const TrainingResult: React.FC<Props> = ({ className, scores, type }) => {
   const totalScore =
