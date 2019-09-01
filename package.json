@@ -39,7 +39,7 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "lint": "tsc --noEmit && eslint --ext js,ts,tsx .",
+    "lint": "tsc --noEmit && eslint --ext .js,.ts,.tsx .",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "deploy": "gh-pages -d build"
