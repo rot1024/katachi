@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.js": "/katachi/static/js/main.41442ac3.chunk.js",
-    "main.js.map": "/katachi/static/js/main.41442ac3.chunk.js.map",
+    "main.js": "/katachi/static/js/main.62f94284.chunk.js",
+    "main.js.map": "/katachi/static/js/main.62f94284.chunk.js.map",
     "runtime~main.js": "/katachi/static/js/runtime~main.726915d3.js",
     "runtime~main.js.map": "/katachi/static/js/runtime~main.726915d3.js.map",
     "static/js/2.35bef0f3.chunk.js": "/katachi/static/js/2.35bef0f3.chunk.js",
     "static/js/2.35bef0f3.chunk.js.map": "/katachi/static/js/2.35bef0f3.chunk.js.map",
     "index.html": "/katachi/index.html",
-    "precache-manifest.3c88be3e908a90c1f2344c7ecd88615a.js": "/katachi/precache-manifest.3c88be3e908a90c1f2344c7ecd88615a.js",
+    "precache-manifest.84ecf6e080f4fa8908b29725711824a7.js": "/katachi/precache-manifest.84ecf6e080f4fa8908b29725711824a7.js",
     "service-worker.js": "/katachi/service-worker.js"
   }
 }

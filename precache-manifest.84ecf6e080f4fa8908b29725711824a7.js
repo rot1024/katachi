@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "061ff4297bdb365a7ee2c1c292f2492f",
+    "revision": "cb17f543386113d07138394f1768776d",
     "url": "/katachi/index.html"
   },
   {
@@ -8,8 +8,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/katachi/static/js/2.35bef0f3.chunk.js"
   },
   {
-    "revision": "5bae573890fc834376bb",
-    "url": "/katachi/static/js/main.41442ac3.chunk.js"
+    "revision": "3681fd7d962c2cc69773",
+    "url": "/katachi/static/js/main.62f94284.chunk.js"
   },
   {
     "revision": "7bd7b5150429800b499a",
