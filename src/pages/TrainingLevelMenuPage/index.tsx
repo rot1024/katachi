@@ -1,4 +1,6 @@
+/** @jsx jsx */
 import React from "react";
+import { css, jsx } from "@emotion/core";
 
 import TrainingLevelMenu, {
   Level
@@ -12,7 +14,18 @@ export interface Props {
 
 const TrainingLevelMenuPage: React.FC<Props> = ({ className, onSelect }) => {
   return (
-    <div className={className}>
+    <div
+      className={className}
+      css={css`
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      `}
+    >
       <TrainingLevelMenu onSelect={onSelect} />
     </div>
   );

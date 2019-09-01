@@ -18,6 +18,13 @@ const ScaleCorrectionPage: React.FC<Props> = ({
     <div
       className={className}
       css={css`
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         padding: 1em;
       `}
     >

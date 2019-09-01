@@ -52,7 +52,6 @@ const AppContainer: React.FC<Props> = ({
           position: relative;
           flex: auto;
           overflow: hidden;
-          overflow-y: auto;
         `}
       >
         {children}

@@ -105,6 +105,8 @@ const TrainingPage: React.FC<Props> = ({
   return (
     <div
       css={css`
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
         position: absolute;
         top: 0;
         left: 0;

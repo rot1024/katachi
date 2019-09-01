@@ -23,6 +23,8 @@ const SettingPage: React.FC<Props> = ({ className, onSelect }) => {
     <div
       className={className}
       css={css`
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
         position: absolute;
         top: 0;
         left: 0;
