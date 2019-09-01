@@ -27,6 +27,7 @@ const Menu: React.FC<Props> = ({ className, items, onSelect }) => {
       onSelect(id);
     }
   };
+  const iconShown = items && items.some(i => !!i.icon);
 
   return (
     <ul
@@ -42,7 +43,7 @@ const Menu: React.FC<Props> = ({ className, items, onSelect }) => {
           <li
             css={css`
               display: block;
-              padding: 0.8em 1em 0.8em ${item.icon ? "1em" : "3em"};
+              padding: 0.8em 1em 0.8em ${iconShown && item.icon ? "3em" : "1em"};
               user-select: none;
               cursor: pointer;
               position: relative;
@@ -55,7 +56,6 @@ const Menu: React.FC<Props> = ({ className, items, onSelect }) => {
                 float: right;
                 color: ${theme.accent};
                 font-size: 0.9rem;
-                font-weight: bold;
               }
 
               &:active:after {
