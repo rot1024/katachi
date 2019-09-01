@@ -64,7 +64,7 @@ const TrainingPage: React.FC<Props> = ({
     setCurrentState(undefined);
     changeTraining(currentTraining + 1);
     if (
-      trainings.length <= currentTraining &&
+      trainings.length <= currentTraining + 1 &&
       onResult &&
       !finishedAt.current
     ) {
