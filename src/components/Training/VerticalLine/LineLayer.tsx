@@ -54,20 +54,16 @@ const VerticalLineLayer: React.FC<Props> = ({
     ? ratio.length >= pointCount
       ? ratio.length === 1
         ? 0
-        : undefined
+        : null
       : ratio.length
     : 0;
   const handleMouseDownWhole = (e: KonvaEventObject<MouseEvent>) =>
-    onMouseDown && nextPoint ? onMouseDown(e, nextPoint) : undefined;
+    onMouseDown && nextPoint !== null ? onMouseDown(e, nextPoint) : undefined;
   const handleTouchStartWhole = (e: KonvaEventObject<TouchEvent>) =>
-    onTouchStart && nextPoint ? onTouchStart(e, nextPoint) : undefined;
+    onTouchStart && nextPoint !== null ? onTouchStart(e, nextPoint) : undefined;
 
   return (
-    <Layer
-      x={x}
-      y={y}
-      rotationDeg={direction === Direction.Horizontal ? -90 : 0}
-    >
+    <Layer x={x} y={y} rotation={direction === Direction.Horizontal ? -90 : 0}>
       <Line
         points={[0, longerLength - lineLength, 0, longerLength]}
         strokeWidth={strokeWith}
