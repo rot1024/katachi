@@ -184,19 +184,22 @@ const TrainingPage: React.FC<Props> = ({
                 text-align: center;
               `}
             >
-              <Training
+              <div
                 css={css`
                   margin: 0 auto;
                   width: ${trainingSize}px;
                 `}
-                type={type}
-                params={trainings[currentTraining]}
-                screenSize={trainingSize}
-                scaleCorrection={scaleCorrection}
-                isAnswerShown={isAnswerShown}
-                disableOperation={isAnswerShown}
-                onUpdate={setCurrentState}
-              />
+              >
+                <Training
+                  type={type}
+                  params={trainings[currentTraining]}
+                  screenSize={trainingSize}
+                  scaleCorrection={scaleCorrection}
+                  isAnswerShown={isAnswerShown}
+                  disableOperation={isAnswerShown}
+                  onUpdate={setCurrentState}
+                />
+              </div>
             </div>
             <div
               css={css`
