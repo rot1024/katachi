@@ -22,7 +22,7 @@ const getTrainingComponent = (
   t: TrainingType
 ): React.FC<TrainingProps> | undefined => {
   switch (t) {
-    case TrainingType.VerticalLine2:
+    case TrainingType.VerticalLine1:
       return VerticalLine;
   }
   return undefined;

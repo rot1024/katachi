@@ -6,7 +6,7 @@ import Component, { TrainingType, Level } from ".";
 
 storiesOf("TrainingPage", module).add("default", () => (
   <Component
-    type={TrainingType.VerticalLine2}
+    type={TrainingType.VerticalLine1}
     level={Level.Normal}
     onFinish={action("finish")}
   />

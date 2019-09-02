@@ -22,10 +22,10 @@ export enum Level {
 }
 
 export enum TrainingType {
-  VerticalLine2 = "verticalLine2"
-  // VerticalLine3 = "verticalLine3",
-  // HorizontalLine2 = "horizontailLine2",
-  // HorizontalLine3 = "horizontalLine3",
+  VerticalLine1 = "verticalLine1"
+  // VerticalLine2 = "verticalLine2",
+  // HorizontalLine1 = "horizontailLine1",
+  // HorizontalLine2 = "horizontalLine2",
   // Square = "square",
   // SquareVerticalLine = "squareVerticalLine",
   // SquareSkewedLine = "squareSkewedLine",
