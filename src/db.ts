@@ -5,7 +5,7 @@ import "firebase/database";
 import { authState } from "rxfire/auth";
 import { list } from "rxfire/database";
 import { of } from "rxjs";
-import { map, withLatestFrom, mergeMap } from "rxjs/operators";
+import { map, mergeMap } from "rxjs/operators";
 import { useObservable } from "rxjs-hooks";
 
 import { TrainingHistory } from "./lib";

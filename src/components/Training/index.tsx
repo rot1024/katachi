@@ -1,7 +1,7 @@
 import React from "react";
 
 import { TrainingType } from "@katachi/lib";
-import RatiolBar, { Direction } from "./RatioBar";
+import RatioBar, { Direction } from "./RatioBar";
 
 export { TrainingType };
 
@@ -21,19 +21,19 @@ const Training: React.FC<Props> = props => {
   switch (props.type) {
     case TrainingType.VerticalLine1:
       return (
-        <RatiolBar {...props} pointCount={1} direction={Direction.Vertical} />
+        <RatioBar {...props} pointCount={1} direction={Direction.Vertical} />
       );
     case TrainingType.VerticalLine2:
       return (
-        <RatiolBar {...props} pointCount={2} direction={Direction.Vertical} />
+        <RatioBar {...props} pointCount={2} direction={Direction.Vertical} />
       );
     case TrainingType.HorizontalLine1:
       return (
-        <RatiolBar {...props} pointCount={1} direction={Direction.Horizontal} />
+        <RatioBar {...props} pointCount={1} direction={Direction.Horizontal} />
       );
     case TrainingType.HorizontalLine2:
       return (
-        <RatiolBar {...props} pointCount={2} direction={Direction.Horizontal} />
+        <RatioBar {...props} pointCount={2} direction={Direction.Horizontal} />
       );
   }
   return null;
