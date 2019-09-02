@@ -32,7 +32,7 @@ export interface Props extends TrainingProps {
   direction: Direction;
 }
 
-const VerticalLine: React.FC<Props> = ({
+const RatioBar: React.FC<Props> = ({
   className,
   params,
   state,
@@ -212,4 +212,4 @@ const VerticalLine: React.FC<Props> = ({
   );
 };
 
-export default VerticalLine;
+export default RatioBar;

@@ -4,7 +4,7 @@ import { action } from "@storybook/addon-actions";
 
 import Component, { Direction } from ".";
 
-storiesOf("VerticalLine", module)
+storiesOf("RatioBar", module)
   .add("default", () => (
     <Component
       params={[0.5, 0.5, 0.5]}
