@@ -49,6 +49,13 @@ const History: React.FC<Props> = ({ className, histories }) => {
                   margin-left: 1em;
                 `}
               >
+                {h.level}
+              </div>
+              <div
+                css={css`
+                  margin-left: 1em;
+                `}
+              >
                 {humanReadableScore(score)}点
               </div>
               <div css={css``}>

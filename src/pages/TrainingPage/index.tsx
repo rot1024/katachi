@@ -73,13 +73,14 @@ const TrainingPage: React.FC<Props> = ({
       finishedAt.current = new Date();
       onResult({
         datetime: finishedAt.current,
+        level: level,
         scores: scores.current,
         type,
         params: trainings,
         state: status.current
       });
     }
-  }, [currentTraining, onResult, trainings, type]);
+  }, [currentTraining, level, onResult, trainings, type]);
 
   const isAnswerable = useMemo(
     () => !isAnswerShown && currentState && validateState(type, currentState),

@@ -62,6 +62,7 @@ export const useHistories = (user?: string) => {
                     .map(c => [c.snapshot.key, c.snapshot.val()] as const)
                     .map<TrainingHistory>(([, h]) => ({
                       datetime: new Date(h.datetime),
+                      level: h.leve,
                       type: h.type,
                       params: h.params,
                       scores: h.scores,
@@ -82,6 +83,7 @@ export const useHistories = (user?: string) => {
         ? ref
             .push({
               datetime: h.datetime.getTime(),
+              level: h.level,
               type: h.type,
               params: h.params,
               scores: h.scores,

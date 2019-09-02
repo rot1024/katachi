@@ -38,6 +38,7 @@ export enum TrainingType {
 
 export interface TrainingHistory {
   datetime: Date;
+  level: Level;
   type: TrainingType;
   params: number[][];
   state: number[][];
