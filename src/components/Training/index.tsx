@@ -1,8 +1,7 @@
 import React from "react";
 
 import { TrainingType } from "@katachi/lib";
-import { TrainingProps } from "./common";
-import VerticalLine from "./VerticalLine";
+import VerticalLine, { Direction } from "./VerticalLine";
 
 export { TrainingType };
 
@@ -18,20 +17,26 @@ export interface Props {
   onUpdate?: (state: number[]) => void;
 }
 
-const getTrainingComponent = (
-  t: TrainingType
-): React.FC<TrainingProps> | undefined => {
-  switch (t) {
-    case TrainingType.VerticalLine1:
-      return VerticalLine;
-  }
-  return undefined;
-};
-
 const Training: React.FC<Props> = props => {
-  const Component = getTrainingComponent(props.type);
-  if (!Component) return null;
-  return <Component {...props} />;
+  switch (props.type) {
+    case TrainingType.VerticalLine1:
+      return (
+        <VerticalLine
+          {...props}
+          pointCount={1}
+          direction={Direction.Vertical}
+        />
+      );
+    case TrainingType.VerticalLine2:
+      return (
+        <VerticalLine
+          {...props}
+          pointCount={2}
+          direction={Direction.Vertical}
+        />
+      );
+  }
+  return null;
 };
 
 export default Training;

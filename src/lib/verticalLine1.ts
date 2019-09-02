@@ -6,8 +6,8 @@ const verticalLine1: TrainingMenu = {
   stateSize: 1,
   duration: {
     [Level.Easy]: Infinity,
-    [Level.Normal]: 10000,
-    [Level.Hard]: 3000,
+    [Level.Normal]: 15000,
+    [Level.Hard]: 4000,
     [Level.Ultimate]: 1000
   },
   validateParams: ([barLength, bar2Length, ratio]) =>

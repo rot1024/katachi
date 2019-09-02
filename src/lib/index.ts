@@ -1,11 +1,13 @@
 import { TrainingType, TrainingMenu, Rating, Level } from "./common";
 import verticalLine1 from "./verticalLine1";
+import verticalLine2 from "./verticalLine2";
 
 export * from "./common";
 export { TrainingType, Rating, Level };
 
 const trainings: { [key in TrainingType]: TrainingMenu } = {
-  [TrainingType.VerticalLine1]: verticalLine1
+  [TrainingType.VerticalLine1]: verticalLine1,
+  [TrainingType.VerticalLine2]: verticalLine2
 };
 
 export const allTrainingTypes = (): TrainingType[] =>
