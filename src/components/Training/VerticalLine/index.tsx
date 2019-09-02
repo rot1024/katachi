@@ -48,8 +48,7 @@ const VerticalLine: React.FC<Props> = ({
   const lineLength = calcLength(params[0], scaleCorrection);
   const line2Length = calcLength(params[1], scaleCorrection);
   const longerLength = Math.max(lineLength, line2Length);
-  const pointRatio = params[2];
-  const statePointRatio = state ? state[0] : undefined;
+  const pointRatio = params.slice(2);
 
   const calcStateFromY = useCallback(
     (y: number) =>
@@ -66,17 +65,19 @@ const VerticalLine: React.FC<Props> = ({
     typeof onUpdate,
     typeof disableOperation,
     typeof calcStateFromY,
-    typeof params
+    typeof params,
+    typeof direction
   ];
   const dragStartInputs: DragStartInputs = [
     onUpdate,
     disableOperation,
     calcStateFromY,
-    params
+    params,
+    direction
   ];
   const [dragStartCallback, statePointRatio2] = useEventCallback<
-    KonvaEventObject<MouseEvent | TouchEvent>,
-    number | undefined,
+    [KonvaEventObject<MouseEvent | TouchEvent>, number],
+    number[],
     DragStartInputs
   >(
     (event$, inputs$, state$) =>
@@ -84,32 +85,40 @@ const VerticalLine: React.FC<Props> = ({
         inputs$.pipe(
           map(([, , , p]) => p),
           distinctUntilChanged(numberArrayEqual),
-          mapTo(undefined)
+          mapTo([])
         ),
         event$.pipe(
-          withLatestFrom(inputs$),
+          withLatestFrom(inputs$, state$),
           filter(([, [, disableOperation]]) => !disableOperation),
-          map(([e]) => [
-            e.evt instanceof TouchEvent
-              ? e.evt.targetTouches[0].pageY
-              : e.evt.pageY,
-            wrapperRef.current
-              ? wrapperRef.current.getBoundingClientRect().top
-              : 0
-          ]),
-          map(([pageY, offsetY]) => [pageY - offsetY, offsetY] as const),
-          mergeMap(([firstY, offsetY]) =>
+          map(
+            ([[e, i], [, , calcStateFromY, , direction], st]) =>
+              [
+                e.evt instanceof TouchEvent
+                  ? direction === Direction.Horizontal
+                    ? e.evt.targetTouches[0].pageX
+                    : e.evt.targetTouches[0].pageY
+                  : direction === Direction.Horizontal
+                  ? e.evt.pageX
+                  : e.evt.pageY,
+                wrapperRef.current
+                  ? direction === Direction.Horizontal
+                    ? wrapperRef.current.getBoundingClientRect().left
+                    : wrapperRef.current.getBoundingClientRect().top
+                  : 0,
+                i,
+                st,
+                calcStateFromY
+              ] as const
+          ),
+          map(
+            ([pageY, offsetY, i, st, calcStateFromY]) =>
+              [calcStateFromY(pageY - offsetY), offsetY, i, st] as const
+          ),
+          mergeMap(([firstY, offsetY, i, st]) =>
             merge(
               fromEvent<MouseEvent>(document, "mousemove"),
               fromEvent<TouchEvent>(document, "touchmove")
             ).pipe(
-              map(
-                e2 =>
-                  (e2 instanceof TouchEvent
-                    ? e2.targetTouches[0].pageY
-                    : e2.pageY) - offsetY
-              ),
-              startWith(firstY),
               takeUntil(
                 merge(
                   merge(
@@ -140,15 +149,36 @@ const VerticalLine: React.FC<Props> = ({
                   )
                 )
               ),
-              withLatestFrom(inputs$),
-              map(([y, [, , calcStateFromY]]) => calcStateFromY(y))
+              withLatestFrom(inputs$, state$),
+              map(
+                ([e2, [, , calcStateFromY, , direction], st]) =>
+                  [
+                    calcStateFromY(
+                      (e2 instanceof TouchEvent
+                        ? direction === Direction.Horizontal
+                          ? e2.targetTouches[0].pageX
+                          : e2.targetTouches[0].pageY
+                        : direction === Direction.Horizontal
+                        ? e2.pageX
+                        : e2.pageY) - offsetY
+                    ),
+                    st
+                  ] as const
+              ),
+              startWith([firstY, st] as const),
+              map(([y, st]) => [...st.slice(0, i), y, ...st.slice(i + 1)])
             )
           )
         )
       ),
-    statePointRatio,
+    state || [],
     dragStartInputs
   );
+
+  const mainBarX = (screenSize / 3) * 2;
+  const mainBarY = (screenSize - longerLength) / 2;
+  const secondBarX = screenSize / 3;
+  const secondBarY = (screenSize - longerLength) / 2;
 
   return (
     <div ref={wrapperRef}>
@@ -157,23 +187,23 @@ const VerticalLine: React.FC<Props> = ({
           <Rect stroke="#eee" width={screenSize} height={screenSize} />
         </Layer>
         <VerticalLineLayer
-          x={screenSize / 3}
-          y={(screenSize - longerLength) / 2}
+          x={direction === Direction.Horizontal ? secondBarY : secondBarX}
+          y={direction === Direction.Horizontal ? secondBarX : secondBarY}
           lineLength={line2Length}
           longerLength={longerLength}
-          ratio={[pointRatio]}
+          ratio={pointRatio}
           direction={direction}
           pointCount={pointCount}
         />
         <VerticalLineLayer
-          x={(screenSize / 3) * 2}
-          y={(screenSize - longerLength) / 2}
+          x={direction === Direction.Horizontal ? mainBarY : mainBarX}
+          y={direction === Direction.Horizontal ? mainBarX : mainBarY}
           lineLength={lineLength}
           longerLength={longerLength}
-          ratio={statePointRatio2 ? [statePointRatio2] : undefined}
-          answerRatio={isAnswerShown ? [pointRatio] : undefined}
-          onMouseDown={dragStartCallback}
-          onTouchStart={dragStartCallback}
+          ratio={statePointRatio2}
+          answerRatio={isAnswerShown ? pointRatio : undefined}
+          onMouseDown={(e, i) => dragStartCallback([e, i])}
+          onTouchStart={(e, i) => dragStartCallback([e, i])}
           direction={direction}
           pointCount={pointCount}
         />

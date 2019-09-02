@@ -58,4 +58,24 @@ storiesOf("VerticalLine", module)
       pointCount={1}
       direction={Direction.Vertical}
     />
+  ))
+  .add("2 points", () => (
+    <Component
+      params={[1, 1, 1]}
+      screenSize={500}
+      onUpdate={action("onUpdate")}
+      isAnswerShown
+      pointCount={2}
+      direction={Direction.Vertical}
+    />
+  ))
+  .add("2 points with horizontal", () => (
+    <Component
+      params={[1, 1, 1]}
+      screenSize={500}
+      onUpdate={action("onUpdate")}
+      isAnswerShown
+      pointCount={2}
+      direction={Direction.Horizontal}
+    />
   ));
