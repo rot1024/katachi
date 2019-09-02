@@ -69,6 +69,16 @@ storiesOf("Training/RatioBar", module)
       direction={Direction.Vertical}
     />
   ))
+  .add("1 point with horizontal", () => (
+    <Component
+      params={[0.8, 1, 0.6]}
+      screenSize={500}
+      onUpdate={action("onUpdate")}
+      isAnswerShown
+      pointCount={1}
+      direction={Direction.Horizontal}
+    />
+  ))
   .add("2 points with horizontal", () => (
     <Component
       params={[0.8, 1, 0.6, 0.4]}
