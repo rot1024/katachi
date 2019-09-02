@@ -128,14 +128,10 @@ const RatioBar: React.FC<Props> = ({
                     fromEvent(document, "mouseup"),
                     fromEvent(document, "touchend")
                   ).pipe(
-                    withLatestFrom(state$, inputs$),
-                    tap(([, y, [onUpdate, disableOperation]]) => {
-                      if (
-                        typeof y === "number" &&
-                        onUpdate &&
-                        !disableOperation
-                      ) {
-                        onUpdate([y]);
+                    withLatestFrom(inputs$, state$),
+                    tap(([, [onUpdate, disableOperation], st]) => {
+                      if (onUpdate && !disableOperation) {
+                        onUpdate(st);
                       }
                     })
                   ),
