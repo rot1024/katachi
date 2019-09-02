@@ -8,6 +8,7 @@ import {
   clickablePaddingW,
   clickablePaddingH
 } from "./constants";
+import LineWithWhisker from "./LineWithWhisker";
 
 export enum Direction {
   Vertical,
@@ -61,44 +62,27 @@ const VerticalLineLayer: React.FC<Props> = ({
     onMouseDown && nextPoint !== null ? onMouseDown(e, nextPoint) : undefined;
   const handleTouchStartWhole = (e: KonvaEventObject<TouchEvent>) =>
     onTouchStart && nextPoint !== null ? onTouchStart(e, nextPoint) : undefined;
+  const y2 = direction === Direction.Horizontal ? 0 : longerLength - lineLength;
+  const y3 = (r: number) =>
+    direction === Direction.Horizontal
+      ? lineLength * r
+      : longerLength - lineLength * (1 - r);
 
   return (
     <Layer x={x} y={y} rotation={direction === Direction.Horizontal ? -90 : 0}>
-      <Line
-        points={[0, longerLength - lineLength, 0, longerLength]}
-        strokeWidth={strokeWith}
+      <LineWithWhisker
+        x={0}
+        y={y2}
+        length={lineLength}
         stroke="#000"
-      />
-      <Line
-        points={[
-          -whiskerLength / 2,
-          longerLength - lineLength,
-          +whiskerLength / 2,
-          longerLength - lineLength
-        ]}
         strokeWidth={strokeWith}
-        stroke="#000"
-      />
-      <Line
-        points={[
-          -whiskerLength / 2,
-          longerLength,
-          +whiskerLength / 2,
-          longerLength
-        ]}
-        strokeWidth={strokeWith}
-        stroke="#000"
+        whiskerSize={whiskerLength}
       />
       {ratio &&
         ratio.map((r, i) => (
           <Line
             key={i}
-            points={[
-              -whiskerLength / 2,
-              longerLength - lineLength * (1 - r),
-              whiskerLength / 2,
-              longerLength - lineLength * (1 - r)
-            ]}
+            points={[-whiskerLength / 2, y3(r), whiskerLength / 2, y3(r)]}
             strokeWidth={strokeWith}
             stroke="#000"
           />
@@ -107,12 +91,7 @@ const VerticalLineLayer: React.FC<Props> = ({
         answerRatio.map((a, i) => (
           <Line
             key={i}
-            points={[
-              -whiskerLength / 2,
-              longerLength - lineLength * (1 - a),
-              whiskerLength / 2,
-              longerLength - lineLength * (1 - a)
-            ]}
+            points={[-whiskerLength / 2, y3(a), whiskerLength / 2, y3(a)]}
             strokeWidth={strokeWith}
             stroke="#f00"
           />
@@ -130,25 +109,9 @@ const VerticalLineLayer: React.FC<Props> = ({
             key={i}
             points={[
               -clickablePaddingW / 2,
-              longerLength - lineLength * (1 - r),
+              y3(r),
               clickablePaddingW / 2,
-              longerLength - lineLength * (1 - r)
-            ]}
-            strokeWidth={clickablePaddingH}
-            onMouseDown={handleMouseDown(i)}
-            onTouchStart={handleTouchStart(i)}
-            stroke="transparent"
-          />
-        ))}
-      {answerRatio &&
-        answerRatio.map((a, i) => (
-          <Line
-            key={i}
-            points={[
-              -clickablePaddingW / 2,
-              longerLength - lineLength * (1 - a),
-              clickablePaddingW / 2,
-              longerLength - lineLength * (1 - a)
+              y3(r)
             ]}
             strokeWidth={clickablePaddingH}
             onMouseDown={handleMouseDown(i)}

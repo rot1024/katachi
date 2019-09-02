@@ -4,7 +4,7 @@ import { action } from "@storybook/addon-actions";
 
 import Component, { Direction } from ".";
 
-storiesOf("RatioBar", module)
+storiesOf("Training/RatioBar", module)
   .add("default", () => (
     <Component
       params={[0.5, 0.5, 0.5]}
@@ -61,7 +61,7 @@ storiesOf("RatioBar", module)
   ))
   .add("2 points", () => (
     <Component
-      params={[1, 1, 1]}
+      params={[1, 0.8, 0.6, 0.4]}
       screenSize={500}
       onUpdate={action("onUpdate")}
       isAnswerShown
@@ -71,7 +71,7 @@ storiesOf("RatioBar", module)
   ))
   .add("2 points with horizontal", () => (
     <Component
-      params={[1, 1, 1]}
+      params={[0.8, 1, 0.6, 0.4]}
       screenSize={500}
       onUpdate={action("onUpdate")}
       isAnswerShown

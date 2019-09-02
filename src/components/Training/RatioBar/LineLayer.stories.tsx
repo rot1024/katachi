@@ -5,7 +5,7 @@ import { action } from "@storybook/addon-actions";
 import Component, { Direction } from "./LineLayer";
 import { Stage } from "react-konva";
 
-storiesOf("RatioBar/LineLayer", module)
+storiesOf("Training/RatioBar/LineLayer", module)
   .add("1 point", () => (
     <Stage width={500} height={500}>
       <Component

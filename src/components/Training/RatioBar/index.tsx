@@ -53,12 +53,15 @@ const RatioBar: React.FC<Props> = ({
   const calcStateFromY = useCallback(
     (y: number) =>
       clamp(
-        (y - ((screenSize - longerLength) / 2 + (longerLength - lineLength))) /
-          lineLength,
+        direction === Direction.Horizontal
+          ? (y - (screenSize - longerLength) / 2) / lineLength
+          : (y -
+              ((screenSize - longerLength) / 2 + (longerLength - lineLength))) /
+              lineLength,
         0,
         1
       ),
-    [lineLength, longerLength, screenSize]
+    [lineLength, longerLength, screenSize, direction]
   );
 
   type DragStartInputs = [
@@ -176,9 +179,8 @@ const RatioBar: React.FC<Props> = ({
   );
 
   const mainBarX = (screenSize / 3) * 2;
-  const mainBarY = (screenSize - longerLength) / 2;
   const secondBarX = screenSize / 3;
-  const secondBarY = (screenSize - longerLength) / 2;
+  const barY = (screenSize - longerLength) / 2;
 
   return (
     <div ref={wrapperRef}>
@@ -187,8 +189,8 @@ const RatioBar: React.FC<Props> = ({
           <Rect stroke="#eee" width={screenSize} height={screenSize} />
         </Layer>
         <VerticalLineLayer
-          x={direction === Direction.Horizontal ? secondBarY : secondBarX}
-          y={direction === Direction.Horizontal ? secondBarX : secondBarY}
+          x={direction === Direction.Horizontal ? barY : secondBarX}
+          y={direction === Direction.Horizontal ? secondBarX : barY}
           lineLength={line2Length}
           longerLength={longerLength}
           ratio={pointRatio}
@@ -196,8 +198,8 @@ const RatioBar: React.FC<Props> = ({
           pointCount={pointCount}
         />
         <VerticalLineLayer
-          x={direction === Direction.Horizontal ? mainBarY : mainBarX}
-          y={direction === Direction.Horizontal ? mainBarX : mainBarY}
+          x={direction === Direction.Horizontal ? barY : mainBarX}
+          y={direction === Direction.Horizontal ? mainBarX : barY}
           lineLength={lineLength}
           longerLength={longerLength}
           ratio={statePointRatio2}
