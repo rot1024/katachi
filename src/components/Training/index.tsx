@@ -27,6 +27,14 @@ const Training: React.FC<Props> = props => {
       return (
         <RatiolBar {...props} pointCount={2} direction={Direction.Vertical} />
       );
+    case TrainingType.HorizontalLine1:
+      return (
+        <RatiolBar {...props} pointCount={1} direction={Direction.Horizontal} />
+      );
+    case TrainingType.HorizontalLine2:
+      return (
+        <RatiolBar {...props} pointCount={2} direction={Direction.Horizontal} />
+      );
   }
   return null;
 };
