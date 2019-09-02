@@ -20,9 +20,19 @@ import { clamp, numberArrayEqual } from "@katachi/util";
 import { TrainingProps } from "../common";
 
 import { calcLength } from "./constants";
-import VerticalLineLayer from "./VerticalLineLayer";
+import VerticalLineLayer from "./LineLayer";
 
-const VerticalLine: React.FC<TrainingProps> = ({
+export enum Direction {
+  Vertical,
+  Horizontal
+}
+
+export interface Props extends TrainingProps {
+  pointCount: number;
+  direction: Direction;
+}
+
+const VerticalLine: React.FC<Props> = ({
   className,
   params,
   state,
@@ -30,7 +40,9 @@ const VerticalLine: React.FC<TrainingProps> = ({
   screenSize,
   scaleCorrection = 1,
   disableOperation,
-  onUpdate
+  onUpdate,
+  pointCount,
+  direction
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const lineLength = calcLength(params[0], scaleCorrection);
@@ -149,17 +161,21 @@ const VerticalLine: React.FC<TrainingProps> = ({
           y={(screenSize - longerLength) / 2}
           lineLength={line2Length}
           longerLength={longerLength}
-          ratio={pointRatio}
+          ratio={[pointRatio]}
+          direction={direction}
+          pointCount={pointCount}
         />
         <VerticalLineLayer
           x={(screenSize / 3) * 2}
           y={(screenSize - longerLength) / 2}
           lineLength={lineLength}
           longerLength={longerLength}
-          ratio={statePointRatio2 ? statePointRatio2 : undefined}
-          answerRatio={isAnswerShown ? pointRatio : undefined}
+          ratio={statePointRatio2 ? [statePointRatio2] : undefined}
+          answerRatio={isAnswerShown ? [pointRatio] : undefined}
           onMouseDown={dragStartCallback}
           onTouchStart={dragStartCallback}
+          direction={direction}
+          pointCount={pointCount}
         />
       </Stage>
     </div>

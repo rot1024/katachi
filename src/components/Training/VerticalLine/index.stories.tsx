@@ -2,15 +2,17 @@ import React from "react";
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 
-import Component from ".";
+import Component, { Direction } from ".";
 
-storiesOf("VerticalLine2", module)
+storiesOf("VerticalLine", module)
   .add("default", () => (
     <Component
       params={[0.5, 0.5, 0.5]}
       state={[1]}
       screenSize={500}
       onUpdate={action("onUpdate")}
+      pointCount={1}
+      direction={Direction.Vertical}
     />
   ))
   .add("with answer", () => (
@@ -20,6 +22,8 @@ storiesOf("VerticalLine2", module)
       screenSize={500}
       onUpdate={action("onUpdate")}
       isAnswerShown
+      pointCount={1}
+      direction={Direction.Vertical}
     />
   ))
   .add("with disableOperation", () => (
@@ -29,6 +33,8 @@ storiesOf("VerticalLine2", module)
       screenSize={500}
       onUpdate={action("onUpdate")}
       disableOperation
+      pointCount={1}
+      direction={Direction.Vertical}
     />
   ))
   .add("extream min", () => (
@@ -38,6 +44,8 @@ storiesOf("VerticalLine2", module)
       screenSize={500}
       onUpdate={action("onUpdate")}
       isAnswerShown
+      pointCount={1}
+      direction={Direction.Vertical}
     />
   ))
   .add("extream max", () => (
@@ -47,5 +55,7 @@ storiesOf("VerticalLine2", module)
       screenSize={500}
       onUpdate={action("onUpdate")}
       isAnswerShown
+      pointCount={1}
+      direction={Direction.Vertical}
     />
   ));
