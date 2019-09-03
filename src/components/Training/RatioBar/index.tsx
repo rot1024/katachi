@@ -5,6 +5,7 @@ import { TrainingProps, useDrag } from "../common";
 
 import { calcLength } from "./constants";
 import VerticalLineLayer from "./LineLayer";
+import { updateArray } from "@katachi/util";
 
 export enum Direction {
   Vertical,
@@ -34,12 +35,16 @@ const RatioBar: React.FC<Props> = ({
   const answer = params.slice(2);
 
   const calcStateFromPos = useCallback(
-    (y: number) =>
-      direction === Direction.Horizontal
-        ? (y - (screenSize - longerLength) / 2) / lineLength
-        : (y -
-            ((screenSize - longerLength) / 2 + (longerLength - lineLength))) /
-          lineLength,
+    (x: number, y: number, i: number, state: number[]) =>
+      updateArray(
+        state,
+        i,
+        direction === Direction.Horizontal
+          ? (x - (screenSize - longerLength) / 2) / lineLength
+          : (y -
+              ((screenSize - longerLength) / 2 + (longerLength - lineLength))) /
+              lineLength
+      ),
     [lineLength, longerLength, screenSize, direction]
   );
 
@@ -48,8 +53,7 @@ const RatioBar: React.FC<Props> = ({
     onUpdate,
     disableOperation,
     calcStateFromPos,
-    params,
-    useX: direction === Direction.Horizontal
+    params
   });
 
   const mainBarX = (screenSize / 3) * 2;

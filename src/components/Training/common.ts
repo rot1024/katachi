@@ -31,9 +31,13 @@ export interface UseDragOptions<E extends HTMLElement> {
   firstState: number[] | undefined;
   onUpdate?: (state: number[]) => void;
   disableOperation?: boolean;
-  calcStateFromPos: (pos: number) => number;
+  calcStateFromPos: (
+    x: number,
+    y: number,
+    i: number,
+    state: number[]
+  ) => number[];
   params: number[];
-  useX?: boolean;
   wrapperRef?: RefObject<E>;
 }
 
@@ -41,9 +45,13 @@ type Inputs<E extends HTMLElement> = [
   UseDragOptions<E>["onUpdate"],
   UseDragOptions<E>["disableOperation"],
   UseDragOptions<E>["calcStateFromPos"],
-  UseDragOptions<E>["params"],
-  UseDragOptions<E>["useX"]
+  UseDragOptions<E>["params"]
 ];
+
+const getPos = (e: MouseEvent | TouchEvent) =>
+  e instanceof TouchEvent
+    ? [e.targetTouches[0].pageX, e.targetTouches[0].pageY]
+    : [e.pageX, e.pageY];
 
 export const useDrag = <E extends HTMLElement>(
   opts: UseDragOptions<E>
@@ -56,8 +64,7 @@ export const useDrag = <E extends HTMLElement>(
     opts.onUpdate,
     opts.disableOperation,
     opts.calcStateFromPos,
-    opts.params,
-    opts.useX
+    opts.params
   ];
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const wrapperRef = opts.wrapperRef || useRef<E>(null);
@@ -74,38 +81,23 @@ export const useDrag = <E extends HTMLElement>(
           mapTo([])
         ),
         event$.pipe(
-          withLatestFrom(inputs$, state$),
+          withLatestFrom(inputs$),
           filter(([, [, disableOperation]]) => !disableOperation),
           map(
-            ([[e, i], [, , calcStateFromPos, , useX], st]) =>
+            ([[e, i]]) =>
               [
-                e.evt instanceof TouchEvent
-                  ? useX
-                    ? e.evt.targetTouches[0].pageX
-                    : e.evt.targetTouches[0].pageY
-                  : useX
-                  ? e.evt.pageX
-                  : e.evt.pageY,
+                getPos(e.evt),
                 wrapperRef.current
-                  ? useX
-                    ? wrapperRef.current.getBoundingClientRect().left
-                    : wrapperRef.current.getBoundingClientRect().top
-                  : 0,
-                i,
-                st,
-                calcStateFromPos
+                  ? [
+                      wrapperRef.current.getBoundingClientRect().left,
+                      wrapperRef.current.getBoundingClientRect().top
+                    ]
+                  : [],
+                i
               ] as const
           ),
-          map(
-            ([pageY, offsetY, i, st, calcStateFromPos]) =>
-              [
-                clamp(calcStateFromPos(pageY - offsetY), 0, 1),
-                offsetY,
-                i,
-                st
-              ] as const
-          ),
-          mergeMap(([firstY, offsetY, i, st]) =>
+          filter(([, offset]) => offset.length > 0),
+          mergeMap(([first, offset, i]) =>
             merge(
               fromEvent<MouseEvent>(document, "mousemove"),
               fromEvent<TouchEvent>(document, "touchmove")
@@ -136,28 +128,14 @@ export const useDrag = <E extends HTMLElement>(
                   )
                 )
               ),
+              map(e => getPos(e)),
+              startWith(first),
               withLatestFrom(inputs$, state$),
-              map(
-                ([e2, [, , calcStateFromY, , useX], st]) =>
-                  [
-                    clamp(
-                      calcStateFromY(
-                        (e2 instanceof TouchEvent
-                          ? useX
-                            ? e2.targetTouches[0].pageX
-                            : e2.targetTouches[0].pageY
-                          : useX
-                          ? e2.pageX
-                          : e2.pageY) - offsetY
-                      ),
-                      0,
-                      1
-                    ),
-                    st
-                  ] as const
-              ),
-              startWith([firstY, st] as const),
-              map(([y, st]) => [...st.slice(0, i), y, ...st.slice(i + 1)])
+              map(([e, [, , calcStateFromPos], st]) =>
+                calcStateFromPos(e[0] - offset[0], e[1] - offset[1], i, st).map(
+                  s => clamp(s, 0, 1)
+                )
+              )
             )
           )
         )
