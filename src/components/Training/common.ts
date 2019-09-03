@@ -27,42 +27,44 @@ export interface TrainingProps {
   onUpdate?: (state: number[]) => void;
 }
 
-export interface UseDragOptions {
+export interface UseDragOptions<E extends HTMLElement> {
+  firstState: number[] | undefined;
   onUpdate?: (state: number[]) => void;
   disableOperation?: boolean;
   calcStateFromPos: (pos: number) => number;
   params: number[];
   useX?: boolean;
+  wrapperRef?: RefObject<E>;
 }
 
-type Inputs = [
-  UseDragOptions["onUpdate"],
-  UseDragOptions["disableOperation"],
-  UseDragOptions["calcStateFromPos"],
-  UseDragOptions["params"],
-  UseDragOptions["useX"]
+type Inputs<E extends HTMLElement> = [
+  UseDragOptions<E>["onUpdate"],
+  UseDragOptions<E>["disableOperation"],
+  UseDragOptions<E>["calcStateFromPos"],
+  UseDragOptions<E>["params"],
+  UseDragOptions<E>["useX"]
 ];
 
 export const useDrag = <E extends HTMLElement>(
-  firstState: number[] | undefined,
-  opts: UseDragOptions
+  opts: UseDragOptions<E>
 ): [
   (e: [KonvaEventObject<MouseEvent | TouchEvent>, number]) => void,
   number[],
   RefObject<E>
 ] => {
-  const inputs: Inputs = [
+  const inputs: Inputs<E> = [
     opts.onUpdate,
     opts.disableOperation,
     opts.calcStateFromPos,
     opts.params,
     opts.useX
   ];
-  const wrapperRef = useRef<E>(null);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const wrapperRef = opts.wrapperRef || useRef<E>(null);
   const [callback, state] = useEventCallback<
     [KonvaEventObject<MouseEvent | TouchEvent>, number],
     number[],
-    Inputs
+    Inputs<E>
   >(
     (event$, inputs$, state$) =>
       merge(
@@ -160,7 +162,7 @@ export const useDrag = <E extends HTMLElement>(
           )
         )
       ),
-    firstState || [],
+    opts.firstState || [],
     inputs
   );
   return [callback, state, wrapperRef];

@@ -43,16 +43,14 @@ const RatioBar: React.FC<Props> = ({
     [lineLength, longerLength, screenSize, direction]
   );
 
-  const [dragStartCallback, state, wrapperRef] = useDrag<HTMLDivElement>(
+  const [dragStartCallback, state, wrapperRef] = useDrag<HTMLDivElement>({
     firstState,
-    {
-      onUpdate,
-      disableOperation,
-      calcStateFromPos,
-      params,
-      useX: direction === Direction.Horizontal
-    }
-  );
+    onUpdate,
+    disableOperation,
+    calcStateFromPos,
+    params,
+    useX: direction === Direction.Horizontal
+  });
 
   const mainBarX = (screenSize / 3) * 2;
   const secondBarX = screenSize / 3;
