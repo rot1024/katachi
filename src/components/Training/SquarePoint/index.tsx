@@ -20,12 +20,18 @@ const SquarePoint: React.FC<TrainingProps> = ({
   const mainRectX = rectX + margin + rectSize;
 
   const calcStateFromPos = useCallback<CalcStateFn>(
-    ({ x, y, dx, dy, isFirstTime, lastState }) => {
-      return [
-        (isFirstTime ? x - mainRectX : lastState[0] * rectSize + dx) / rectSize,
-        (isFirstTime ? y - rectY : lastState[1] * rectSize + dy) / rectSize
-      ];
-    },
+    ({ x, y, dx, dy, isFirstTime, lastState }) =>
+      isFirstTime ||
+      (typeof lastState[0] === "number" && typeof lastState[1] === "number")
+        ? [
+            (isFirstTime
+              ? x - mainRectX
+              : (lastState[0] as number) * rectSize + dx) / rectSize,
+            (isFirstTime
+              ? y - rectY
+              : (lastState[1] as number) * rectSize + dy) / rectSize
+          ]
+        : [],
     [mainRectX, rectSize, rectY]
   );
 
@@ -69,14 +75,17 @@ const SquarePoint: React.FC<TrainingProps> = ({
             fill="#000"
             radius={3}
           />
-          {!!state && state.length === 2 && (
-            <Circle
-              x={mainRectX + rectSize * state[0]}
-              y={rectY + rectSize * state[1]}
-              fill="#000"
-              radius={3}
-            />
-          )}
+          {!!state &&
+            state.length === 2 &&
+            typeof state[0] === "number" &&
+            typeof state[1] === "number" && (
+              <Circle
+                x={mainRectX + rectSize * (state[0] as number)}
+                y={rectY + rectSize * (state[1] as number)}
+                fill="#000"
+                radius={3}
+              />
+            )}
           {isAnswerShown && (
             <Circle
               x={mainRectX + rectSize * params[1]}

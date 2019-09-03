@@ -19,30 +19,30 @@ import { fromEvent, merge } from "rxjs";
 export interface TrainingProps {
   className?: string;
   params: number[];
-  state?: number[];
+  state?: (number | undefined)[];
   isAnswerShown?: boolean;
   screenSize: number;
   scaleCorrection?: number;
   disableOperation?: boolean;
-  onUpdate?: (state: number[]) => void;
+  onUpdate?: (state: (number | undefined)[]) => void;
 }
 
 export type CalcStateFn = (args: {
   x: number;
   y: number;
   index: number;
-  state: number[];
+  state: (number | undefined)[];
   dx: number;
   dy: number;
   firstX: number;
   firstY: number;
   isFirstTime: boolean;
-  lastState: number[];
-}) => number[];
+  lastState: (number | undefined)[];
+}) => (number | undefined)[];
 
 export interface UseDragOptions<E extends HTMLElement> {
-  firstState: number[] | undefined;
-  onUpdate?: (state: number[]) => void;
+  firstState: (number | undefined)[] | undefined;
+  onUpdate?: (state: (number | undefined)[]) => void;
   disableOperation?: boolean;
   calcStateFromPos: CalcStateFn;
   params: number[];
@@ -65,7 +65,7 @@ export const useDrag = <E extends HTMLElement>(
   opts: UseDragOptions<E>
 ): [
   (e: [KonvaEventObject<MouseEvent | TouchEvent>, number]) => void,
-  number[],
+  (number | undefined)[],
   RefObject<E>
 ] => {
   const inputs: Inputs<E> = [
@@ -78,7 +78,7 @@ export const useDrag = <E extends HTMLElement>(
   const wrapperRef = opts.wrapperRef || useRef<E>(null);
   const [callback, state] = useEventCallback<
     [KonvaEventObject<MouseEvent | TouchEvent>, number],
-    number[],
+    (number | undefined)[],
     Inputs<E>
   >(
     (event$, inputs$, state$) =>
@@ -153,7 +153,7 @@ export const useDrag = <E extends HTMLElement>(
                   firstY: first[1],
                   isFirstTime,
                   lastState
-                }).map(s => clamp(s, 0, 1))
+                }).map(s => (typeof s === "number" ? clamp(s, 0, 1) : s))
               )
             )
           )

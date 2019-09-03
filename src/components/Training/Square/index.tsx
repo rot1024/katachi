@@ -58,13 +58,13 @@ const Square: React.FC<TrainingProps> = ({
             strokeWidth={strokeWidth}
             stroke="#000"
           />
-          {!!state && !!state[0] && (
+          {!!state && typeof state[0] === "number" && (
             <Line
               points={[
                 rectX,
-                rectY + rectH * state[0],
+                rectY + rectH * (state[0] as number),
                 rectX + rectW,
-                rectY + rectH * state[0]
+                rectY + rectH * (state[0] as number)
               ]}
               stroke="#000"
               strokeWidth={strokeWidth}

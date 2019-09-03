@@ -70,12 +70,12 @@ const SquareVerticalLine: React.FC<TrainingProps> = ({
             stroke="#000"
             strokeWidth={strokeWidth}
           />
-          {!!state && !!state[0] && (
+          {!!state && typeof state[0] === "number" && (
             <Line
               points={[
-                mainRectX + rectSize * state[0],
+                mainRectX + rectSize * (state[0] as number),
                 rectY,
-                mainRectX + rectSize * state[0],
+                mainRectX + rectSize * (state[0] as number),
                 rectY + rectSize
               ]}
               stroke="#000"

@@ -80,28 +80,33 @@ const SquareVerticalLine: React.FC<TrainingProps> = ({
             stroke="#000"
             strokeWidth={strokeWidth}
           />
-          {!!state && state.length === 2 && (
-            <Line
-              points={[
-                mainRectX + rectSize * state[0],
-                rectY,
-                mainRectX + rectSize * state[1],
-                rectY + rectSize
-              ]}
-              stroke="#000"
-              strokeWidth={strokeWidth}
-            />
-          )}
           {!!state &&
-            state.map((s, i) => (
-              <Circle
-                key={i}
-                x={mainRectX + rectSize * s}
-                y={i === 1 ? rectY + rectSize : rectY}
-                radius={4}
-                fill="black"
+            state.length === 2 &&
+            typeof state[0] === "number" &&
+            typeof state[1] === "number" && (
+              <Line
+                points={[
+                  mainRectX + rectSize * (state[0] as number),
+                  rectY,
+                  mainRectX + rectSize * (state[1] as number),
+                  rectY + rectSize
+                ]}
+                stroke="#000"
+                strokeWidth={strokeWidth}
               />
-            ))}
+            )}
+          {!!state &&
+            state.map((s, i) =>
+              typeof s === "number" ? (
+                <Circle
+                  key={i}
+                  x={mainRectX + rectSize * s}
+                  y={i === 1 ? rectY + rectSize : rectY}
+                  radius={4}
+                  fill="black"
+                />
+              ) : null
+            )}
           {!!state &&
             state.map((s, i) => (
               <Line

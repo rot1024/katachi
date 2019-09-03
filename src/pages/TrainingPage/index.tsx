@@ -49,12 +49,12 @@ const TrainingPage: React.FC<Props> = ({
   onFinish
 }) => {
   const finishedAt = useRef<Date>();
-  const status = useRef<number[][]>([]);
+  const status = useRef<(number | undefined)[][]>([]);
   const scores = useRef<number[]>([]);
   const trainings = useMemo(() => initTrainings(type, trainingCount), [type]);
   const [started, setStarted] = useState(false);
   const [currentTraining, changeTraining] = useState(0);
-  const [currentState, setCurrentState] = useState<number[]>();
+  const [currentState, setCurrentState] = useState<(number | undefined)[]>();
   const [isAnswerShown, setAnswerShown] = useState(false);
   const [resizeRef, width] = useResizeObserver();
   const [nextButtonVisible, setNextButtonVisible] = useState(false);
@@ -95,7 +95,7 @@ const TrainingPage: React.FC<Props> = ({
         scores: scores.current,
         type,
         params: trainings,
-        state: status.current
+        state: status.current as number[][]
       });
     }
   }, [currentTraining, level, onResult, trainings, type]);

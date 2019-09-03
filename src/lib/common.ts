@@ -4,7 +4,7 @@ export interface TrainingMenu {
   stateSize: number;
   duration: { [key in Level]: number };
   validateParams: (params: number[]) => number[] | boolean;
-  judgeScore: (params: number[], state?: number[]) => number;
+  judgeScore: (params: number[], state?: (number | undefined)[]) => number;
 }
 
 export enum Rating {

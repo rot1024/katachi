@@ -20,7 +20,7 @@ export interface Props {
   lineLength: number;
   x: number;
   y: number;
-  ratio?: number[];
+  ratio?: (number | undefined)[];
   answerRatio?: number[];
   onMouseDown?: (e: KonvaEventObject<MouseEvent>, i: number) => void;
   onTouchStart?: (e: KonvaEventObject<TouchEvent>, i: number) => void;
@@ -79,14 +79,16 @@ const VerticalLineLayer: React.FC<Props> = ({
         whiskerSize={whiskerLength}
       />
       {ratio &&
-        ratio.map((r, i) => (
-          <Line
-            key={i}
-            points={[-whiskerLength / 2, y3(r), whiskerLength / 2, y3(r)]}
-            strokeWidth={strokeWidth}
-            stroke="#000"
-          />
-        ))}
+        ratio.map((r, i) =>
+          typeof r === "number" ? (
+            <Line
+              key={i}
+              points={[-whiskerLength / 2, y3(r), whiskerLength / 2, y3(r)]}
+              strokeWidth={strokeWidth}
+              stroke="#000"
+            />
+          ) : null
+        )}
       {answerRatio &&
         answerRatio.map((a, i) => (
           <Line
@@ -104,21 +106,23 @@ const VerticalLineLayer: React.FC<Props> = ({
         stroke="transparent"
       />
       {ratio &&
-        ratio.map((r, i) => (
-          <Line
-            key={i}
-            points={[
-              -clickablePaddingW / 2,
-              y3(r),
-              clickablePaddingW / 2,
-              y3(r)
-            ]}
-            strokeWidth={clickablePaddingH}
-            onMouseDown={handleMouseDown(i)}
-            onTouchStart={handleTouchStart(i)}
-            stroke="transparent"
-          />
-        ))}
+        ratio.map((r, i) =>
+          typeof r === "number" ? (
+            <Line
+              key={i}
+              points={[
+                -clickablePaddingW / 2,
+                y3(r),
+                clickablePaddingW / 2,
+                y3(r)
+              ]}
+              strokeWidth={clickablePaddingH}
+              onMouseDown={handleMouseDown(i)}
+              onTouchStart={handleTouchStart(i)}
+              stroke="transparent"
+            />
+          ) : null
+        )}
     </Layer>
   );
 };

@@ -13,12 +13,12 @@ export interface Props {
   className?: string;
   type: TrainingType;
   params: number[];
-  state?: number[];
+  state?: (number | undefined)[];
   isAnswerShown?: boolean;
   disableOperation?: boolean;
   screenSize: number;
   scaleCorrection?: number;
-  onUpdate?: (state: number[]) => void;
+  onUpdate?: (state: (number | undefined)[]) => void;
 }
 
 const Training: React.FC<Props> = props => {

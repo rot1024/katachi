@@ -12,12 +12,11 @@ const squareVerticalLine: TrainingMenu = {
   },
   validateParams: ([s, r]) => s > 0.2 && r > 0.1 && r < 0.9,
   judgeScore: (params, state) => {
-    if (params[1] === 0) return 0;
+    if (params[1] === 0 || !state || typeof state[0] !== "number") return 0;
     const range = 0.25 - 0.1 * params[0];
-    const res = state
-      ? 1 - Math.min(range, Math.abs(params[1] - state[0])) / range
+    return state
+      ? 1 - Math.min(range, Math.abs(params[1] - (state[0] as number))) / range
       : 0;
-    return res;
   }
 };
 

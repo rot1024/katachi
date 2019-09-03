@@ -20,17 +20,19 @@ const verticalLine2: TrainingMenu = {
     ratio2 < 0.9 &&
     ratio2 - ratio > 0.3,
   judgeScore: (params, state) => {
-    if (params[0] === 0) return 0;
+    if (params[0] === 0 || !state) return 0;
     const range = 0.3 - 0.1 * params[0];
-    return state
-      ? state
-          .slice(0, 2)
-          .sort()
-          .map(
-            (s, i) => 1 - Math.min(range, Math.abs(params[2 + i] - s)) / range
-          )
-          .reduce((a, b) => a + b, 0) / state.length
-      : 0;
+    return (
+      state
+        .slice(0, 2)
+        .sort()
+        .map((s, i) =>
+          typeof s === "number"
+            ? 1 - Math.min(range, Math.abs(params[2 + i] - s)) / range
+            : 0
+        )
+        .reduce((a, b) => a + b, 0) / state.length
+    );
   }
 };
 

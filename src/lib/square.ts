@@ -12,13 +12,16 @@ const square: TrainingMenu = {
   },
   validateParams: ([w, h]) => w > 0.2 && h > 0.2 && h - w > 0.3,
   judgeScore: (params, state) => {
-    if (params[1] === 0) return 0;
+    if (params[1] === 0 || !state || typeof state[0] !== "number") return 0;
     const range = 0.2 - 0.1 * params[1];
-    const res = state
-      ? 1 -
-        Math.min(range, Math.abs(1 - params[0] / params[1] - state[0])) / range
-      : 0;
-    return res;
+    return (
+      1 -
+      Math.min(
+        range,
+        Math.abs(1 - params[0] / params[1] - (state[0] as number))
+      ) /
+        range
+    );
   }
 };
 
