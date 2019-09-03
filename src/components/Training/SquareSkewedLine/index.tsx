@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Stage, Layer, Rect, Line, Circle } from "react-konva";
 
-import { strokeWidth, calcLength, margin } from "./constants";
+import { strokeWidth, calcLength, margin, padding } from "./constants";
 import { TrainingProps, useDrag } from "../common";
 import { updateArray } from "@katachi/util";
 
@@ -104,12 +104,16 @@ const SquareVerticalLine: React.FC<TrainingProps> = ({
             ))}
           {!!state &&
             state.map((s, i) => (
-              <Circle
+              <Line
                 key={i}
-                x={mainRectX + rectSize * s}
-                y={i === 1 ? rectY + rectSize : rectY}
-                radius={20}
-                fill="transparent"
+                points={[
+                  mainRectX - padding,
+                  i === 0 ? rectY : rectY + rectSize,
+                  mainRectX + rectSize + padding,
+                  i === 0 ? rectY : rectY + rectSize
+                ]}
+                strokeWidth={padding}
+                stroke="transparent"
                 onMouseDown={e => dragStartCallback([e, i])}
                 onTouchStart={e => dragStartCallback([e, i])}
               />

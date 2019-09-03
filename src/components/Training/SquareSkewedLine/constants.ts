@@ -6,3 +6,4 @@ export const calcLength = (ratio: number, scaleCorrection: number) =>
 // style
 export const margin = 20;
 export const strokeWidth = 3;
+export const padding = 20;
