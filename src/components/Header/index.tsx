@@ -26,10 +26,10 @@ const Header: React.FC<Props> = ({
     <div
       css={css`
         font-size: 1.2rem;
+        height: 2.5em;
+        line-height: 2.5em;
         padding: 0 1em;
         color: ${theme.accent};
-        height: 3em;
-        line-height: 3em;
         font-weight: bold;
         text-align: center;
       `}
@@ -38,15 +38,15 @@ const Header: React.FC<Props> = ({
       {backButtonVisible && (
         <div
           css={css`
-            width: 3em;
-            height: 3em;
+            width: 2.5em;
+            height: 2.5em;
+            line-height: 2.5em;
             position: absolute;
             top: 0;
             left: 0;
             cursor: pointer;
             user-select: none;
             text-align: center;
-            line-height: 3em;
             color: #888;
             font-size: 20px;
           `}
@@ -59,15 +59,15 @@ const Header: React.FC<Props> = ({
       {closable && (
         <div
           css={css`
-            width: 3em;
-            height: 3em;
+            width: 2.5em;
+            height: 2.5em;
+            line-height: 2.5em;
             position: absolute;
             top: 0;
             right: 0;
             cursor: pointer;
             user-select: none;
             text-align: center;
-            line-height: 3em;
             color: #888;
             font-size: 20px;
           `}
