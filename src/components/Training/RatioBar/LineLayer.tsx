@@ -4,7 +4,7 @@ import { Line, Layer } from "react-konva";
 
 import {
   whiskerLength,
-  strokeWith,
+  strokeWidth,
   clickablePaddingW,
   clickablePaddingH
 } from "./constants";
@@ -75,7 +75,7 @@ const VerticalLineLayer: React.FC<Props> = ({
         y={y2}
         length={lineLength}
         stroke="#000"
-        strokeWidth={strokeWith}
+        strokeWidth={strokeWidth}
         whiskerSize={whiskerLength}
       />
       {ratio &&
@@ -83,7 +83,7 @@ const VerticalLineLayer: React.FC<Props> = ({
           <Line
             key={i}
             points={[-whiskerLength / 2, y3(r), whiskerLength / 2, y3(r)]}
-            strokeWidth={strokeWith}
+            strokeWidth={strokeWidth}
             stroke="#000"
           />
         ))}
@@ -92,7 +92,7 @@ const VerticalLineLayer: React.FC<Props> = ({
           <Line
             key={i}
             points={[-whiskerLength / 2, y3(a), whiskerLength / 2, y3(a)]}
-            strokeWidth={strokeWith}
+            strokeWidth={strokeWidth}
             stroke="#f00"
           />
         ))}
