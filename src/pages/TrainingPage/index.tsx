@@ -1,5 +1,12 @@
 /** @jsx jsx */
-import React, { useState, useCallback, useMemo, useRef, Fragment } from "react";
+import React, {
+  useState,
+  useCallback,
+  useMemo,
+  useRef,
+  Fragment,
+  useEffect
+} from "react";
 import { jsx, css } from "@emotion/core";
 import useResizeObserver from "use-resize-observer";
 
@@ -50,6 +57,17 @@ const TrainingPage: React.FC<Props> = ({
   const [currentState, setCurrentState] = useState<number[]>();
   const [isAnswerShown, setAnswerShown] = useState(false);
   const [resizeRef, width] = useResizeObserver();
+  const [nextButtonVisible, setNextButtonVisible] = useState(false);
+  useEffect(() => {
+    if (isAnswerShown) {
+      const timeout = setTimeout(() => {
+        setNextButtonVisible(true);
+      }, 1000);
+      return () => clearTimeout(timeout);
+    } else {
+      setNextButtonVisible(false);
+    }
+  }, [isAnswerShown]);
 
   const handleAnswer = useCallback(() => {
     if (!trainings || trainings.length <= currentTraining || !currentState)
@@ -207,7 +225,7 @@ const TrainingPage: React.FC<Props> = ({
               `}
             >
               {isAnswerable && <Button onClick={handleAnswer}>OK</Button>}
-              {isAnswerShown && (
+              {nextButtonVisible && (
                 <Button onClick={handleNext}>
                   {trainings.length - 1 <= currentTraining
                     ? "Check Result"
