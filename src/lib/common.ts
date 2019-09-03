@@ -27,8 +27,8 @@ export enum TrainingType {
   HorizontalLine1 = "horizontailLine1",
   HorizontalLine2 = "horizontalLine2",
   Square = "square",
-  SquareVerticalLine = "squareVerticalLine"
-  // SquareSkewedLine = "squareSkewedLine",
+  SquareVerticalLine = "squareVerticalLine",
+  SquareSkewedLine = "squareSkewedLine"
   // SquareDogleggedLine = "squareDogleggedLine",
   // SquareTriangle = "squareTriangle",
   // SquarePoint = "squarePoint",

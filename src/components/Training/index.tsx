@@ -4,6 +4,7 @@ import { TrainingType } from "@katachi/lib";
 import RatioBar, { Direction } from "./RatioBar";
 import Square from "./Square";
 import SquareVerticalLine from "./SquareVerticalLine";
+import SquareSkewedLine from "./SquareSkewedLine";
 
 export { TrainingType };
 
@@ -41,6 +42,8 @@ const Training: React.FC<Props> = props => {
       return <Square {...props} />;
     case TrainingType.SquareVerticalLine:
       return <SquareVerticalLine {...props} />;
+    case TrainingType.SquareSkewedLine:
+      return <SquareSkewedLine {...props} />;
   }
   return null;
 };
