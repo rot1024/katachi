@@ -5,6 +5,7 @@ import RatioBar, { Direction } from "./RatioBar";
 import Square from "./Square";
 import SquareVerticalLine from "./SquareVerticalLine";
 import SquareSkewedLine from "./SquareSkewedLine";
+import SquarePoint from "./SquarePoint";
 
 export { TrainingType };
 
@@ -44,6 +45,8 @@ const Training: React.FC<Props> = props => {
       return <SquareVerticalLine {...props} />;
     case TrainingType.SquareSkewedLine:
       return <SquareSkewedLine {...props} />;
+    case TrainingType.SquarePoint:
+      return <SquarePoint {...props} />;
   }
   return null;
 };
