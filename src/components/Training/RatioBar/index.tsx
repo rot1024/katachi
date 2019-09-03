@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Stage, Layer, Rect } from "react-konva";
 
-import { TrainingProps, useDrag } from "../common";
+import { TrainingProps, useDrag, CalcStateFn } from "../common";
 
 import { calcLength } from "./constants";
 import VerticalLineLayer from "./LineLayer";
@@ -34,11 +34,11 @@ const RatioBar: React.FC<Props> = ({
   const longerLength = Math.max(lineLength, line2Length);
   const answer = params.slice(2);
 
-  const calcStateFromPos = useCallback(
-    (x: number, y: number, i: number, state: number[]) =>
+  const calcStateFromPos = useCallback<CalcStateFn>(
+    ({ x, y, index, state }) =>
       updateArray(
         state,
-        i,
+        index,
         direction === Direction.Horizontal
           ? (x - (screenSize - longerLength) / 2) / lineLength
           : (y -

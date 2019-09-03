@@ -8,7 +8,7 @@ import {
   calcAnswer,
   calcRectY
 } from "./constants";
-import { TrainingProps, useDrag } from "../common";
+import { TrainingProps, useDrag, CalcStateFn } from "../common";
 import { updateArray } from "@katachi/util";
 
 const Square: React.FC<TrainingProps> = ({
@@ -27,9 +27,8 @@ const Square: React.FC<TrainingProps> = ({
   const rectY = calcRectY(rectH, screenSize);
   const answerY = calcAnswer(rectW, rectH, screenSize);
 
-  const calcStateFromPos = useCallback(
-    (x: number, y: number, i: number, state: number[]) =>
-      updateArray(state, i, (y - rectY) / rectH),
+  const calcStateFromPos = useCallback<CalcStateFn>(
+    ({ y, index, state }) => updateArray(state, index, (y - rectY) / rectH),
     [rectH, rectY]
   );
 

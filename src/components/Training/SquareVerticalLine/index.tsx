@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 import { Stage, Layer, Rect, Line } from "react-konva";
 
 import { strokeWidth, calcLength, margin } from "./constants";
-import { TrainingProps, useDrag } from "../common";
+import { TrainingProps, useDrag, CalcStateFn } from "../common";
 import { updateArray } from "@katachi/util";
 
 const SquareVerticalLine: React.FC<TrainingProps> = ({
@@ -20,9 +20,9 @@ const SquareVerticalLine: React.FC<TrainingProps> = ({
   const rectY = (screenSize - rectSize) / 2;
   const mainRectX = rectX + margin + rectSize;
 
-  const calcStateFromPos = useCallback(
-    (x: number, y: number, i: number, state: number[]) =>
-      updateArray(state, i, (x - mainRectX) / rectSize),
+  const calcStateFromPos = useCallback<CalcStateFn>(
+    ({ x, index, state }) =>
+      updateArray(state, index, (x - mainRectX) / rectSize),
     [rectSize, mainRectX]
   );
 

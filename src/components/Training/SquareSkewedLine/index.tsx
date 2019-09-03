@@ -21,8 +21,8 @@ const SquareVerticalLine: React.FC<TrainingProps> = ({
   const mainRectX = rectX + margin + rectSize;
 
   const calcStateFromPos = useCallback(
-    (x: number, y: number, i: number, state: number[]) =>
-      updateArray(state, i, (x - mainRectX) / rectSize),
+    ({ x, index, state }) =>
+      updateArray(state, index, (x - mainRectX) / rectSize),
     [rectSize, mainRectX]
   );
 

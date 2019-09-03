@@ -27,16 +27,24 @@ export interface TrainingProps {
   onUpdate?: (state: number[]) => void;
 }
 
+export type CalcStateFn = (args: {
+  x: number;
+  y: number;
+  index: number;
+  state: number[];
+  dx: number;
+  dy: number;
+  firstX: number;
+  firstY: number;
+  isFirstTime: boolean;
+  lastState: number[];
+}) => number[];
+
 export interface UseDragOptions<E extends HTMLElement> {
   firstState: number[] | undefined;
   onUpdate?: (state: number[]) => void;
   disableOperation?: boolean;
-  calcStateFromPos: (
-    x: number,
-    y: number,
-    i: number,
-    state: number[]
-  ) => number[];
+  calcStateFromPos: CalcStateFn;
   params: number[];
   wrapperRef?: RefObject<E>;
 }
@@ -81,10 +89,10 @@ export const useDrag = <E extends HTMLElement>(
           mapTo([])
         ),
         event$.pipe(
-          withLatestFrom(inputs$),
+          withLatestFrom(inputs$, state$),
           filter(([, [, disableOperation]]) => !disableOperation),
           map(
-            ([[e, i]]) =>
+            ([[e, i], , st]) =>
               [
                 getPos(e.evt),
                 wrapperRef.current
@@ -93,11 +101,13 @@ export const useDrag = <E extends HTMLElement>(
                       wrapperRef.current.getBoundingClientRect().top
                     ]
                   : [],
-                i
+                i,
+                st.length === 0,
+                st
               ] as const
           ),
           filter(([, offset]) => offset.length > 0),
-          mergeMap(([first, offset, i]) =>
+          mergeMap(([first, offset, i, isFirstTime, lastState]) =>
             merge(
               fromEvent<MouseEvent>(document, "mousemove"),
               fromEvent<TouchEvent>(document, "touchmove")
@@ -132,9 +142,18 @@ export const useDrag = <E extends HTMLElement>(
               startWith(first),
               withLatestFrom(inputs$, state$),
               map(([e, [, , calcStateFromPos], st]) =>
-                calcStateFromPos(e[0] - offset[0], e[1] - offset[1], i, st).map(
-                  s => clamp(s, 0, 1)
-                )
+                calcStateFromPos({
+                  x: e[0] - offset[0],
+                  y: e[1] - offset[1],
+                  index: i,
+                  state: st,
+                  dx: e[0] - first[0],
+                  dy: e[1] - first[1],
+                  firstX: first[0],
+                  firstY: first[1],
+                  isFirstTime,
+                  lastState
+                }).map(s => clamp(s, 0, 1))
               )
             )
           )
