@@ -5,7 +5,9 @@ export const numberArrayEqual = (a: number[], b: number[]) =>
   a.length === b.length && a.every((c, i) => c === b[i]);
 
 export const updateArray = <T>(a: T[], i: number, val: T) => [
-  ...a.slice(0, i),
+  ...(a.length >= i
+    ? a.slice(0, i)
+    : a.concat(new Array(i - a.length).fill(undefined))),
   val,
   ...a.slice(i + 1)
 ];

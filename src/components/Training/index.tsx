@@ -6,6 +6,7 @@ import Square from "./Square";
 import SquareVerticalLine from "./SquareVerticalLine";
 import SquareSkewedLine from "./SquareSkewedLine";
 import SquarePoint from "./SquarePoint";
+import SquareDogleggedLine from "./SquareDogleggedLine";
 
 export { TrainingType };
 
@@ -47,6 +48,8 @@ const Training: React.FC<Props> = props => {
       return <SquareSkewedLine {...props} />;
     case TrainingType.SquarePoint:
       return <SquarePoint {...props} />;
+    case TrainingType.SquareDogleggedLine:
+      return <SquareDogleggedLine {...props} />;
   }
   return null;
 };

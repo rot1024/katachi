@@ -7,6 +7,7 @@ import square from "./square";
 import squareVerticalLine from "./squareVerticalLine";
 import squareSkewedLine from "./squareSkewedLine";
 import squarePoint from "./squarePoint";
+import squareDogleggedLine from "./squareDogleggedLine";
 
 export * from "./common";
 export { TrainingType, Rating, Level };
@@ -19,7 +20,8 @@ const trainings: { [key in TrainingType]: TrainingMenu } = {
   [TrainingType.Square]: square,
   [TrainingType.SquareVerticalLine]: squareVerticalLine,
   [TrainingType.SquareSkewedLine]: squareSkewedLine,
-  [TrainingType.SquarePoint]: squarePoint
+  [TrainingType.SquarePoint]: squarePoint,
+  [TrainingType.SquareDogleggedLine]: squareDogleggedLine
 };
 
 export const allTrainingTypes = (): TrainingType[] =>
@@ -39,7 +41,7 @@ export const initTrainings = (
 
 export const initTraining = (type: TrainingType): number[] | undefined => {
   const trainingMenu = trainings[type];
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 1000; i++) {
     const params = new Array(trainingMenu.paramsSize)
       .fill(0)
       .map(() => Math.random());
@@ -53,13 +55,17 @@ export const initTraining = (type: TrainingType): number[] | undefined => {
   }
 };
 
-export const validateState = (type: TrainingType, state: number[]) =>
-  state.length === trainings[type].stateSize;
+export const validateState = (
+  type: TrainingType,
+  state: (number | undefined)[]
+): state is number[] =>
+  state.length === trainings[type].stateSize &&
+  state.every(s => typeof s === "number");
 
 export const judgeScore = (
   type: TrainingType,
   params: number[],
-  state?: number[]
+  state?: (number | undefined)[]
 ) => trainings[type].judgeScore(params, state);
 
 export const getRating = (score: number) => {
