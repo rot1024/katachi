@@ -2,6 +2,7 @@ import React from "react";
 
 import { TrainingType } from "@katachi/lib";
 import RatioBar, { Direction } from "./RatioBar";
+import Square from "./Square";
 
 export { TrainingType };
 
@@ -35,6 +36,8 @@ const Training: React.FC<Props> = props => {
       return (
         <RatioBar {...props} pointCount={2} direction={Direction.Horizontal} />
       );
+    case TrainingType.Square:
+      return <Square {...props} />;
   }
   return null;
 };

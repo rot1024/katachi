@@ -3,6 +3,7 @@ import verticalLine1 from "./verticalLine1";
 import verticalLine2 from "./verticalLine2";
 import horizontalLine1 from "./horizontalLine1";
 import horizontalLine2 from "./horizontalLine2";
+import square from "./square";
 
 export * from "./common";
 export { TrainingType, Rating, Level };
@@ -11,7 +12,8 @@ const trainings: { [key in TrainingType]: TrainingMenu } = {
   [TrainingType.VerticalLine1]: verticalLine1,
   [TrainingType.VerticalLine2]: verticalLine2,
   [TrainingType.HorizontalLine1]: horizontalLine1,
-  [TrainingType.HorizontalLine2]: horizontalLine2
+  [TrainingType.HorizontalLine2]: horizontalLine2,
+  [TrainingType.Square]: square
 };
 
 export const allTrainingTypes = (): TrainingType[] =>
