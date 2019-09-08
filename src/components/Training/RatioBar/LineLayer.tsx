@@ -51,17 +51,6 @@ const VerticalLineLayer: React.FC<Props> = ({
     onTouchStart
       ? (e: KonvaEventObject<TouchEvent>) => onTouchStart(e, i)
       : undefined;
-  const nextPoint = ratio
-    ? ratio.length >= pointCount
-      ? ratio.length === 1
-        ? 0
-        : null
-      : ratio.length
-    : 0;
-  const handleMouseDownWhole = (e: KonvaEventObject<MouseEvent>) =>
-    onMouseDown && nextPoint !== null ? onMouseDown(e, nextPoint) : undefined;
-  const handleTouchStartWhole = (e: KonvaEventObject<TouchEvent>) =>
-    onTouchStart && nextPoint !== null ? onTouchStart(e, nextPoint) : undefined;
   const y2 = direction === Direction.Horizontal ? 0 : longerLength - lineLength;
   const y3 = (r: number) =>
     direction === Direction.Horizontal
@@ -98,13 +87,6 @@ const VerticalLineLayer: React.FC<Props> = ({
             stroke="#f00"
           />
         ))}
-      <Line
-        points={[0, -clickablePaddingH, 0, longerLength + clickablePaddingH]}
-        strokeWidth={clickablePaddingW}
-        onMouseDown={handleMouseDownWhole}
-        onTouchStart={handleTouchStartWhole}
-        stroke="transparent"
-      />
       {ratio &&
         ratio.map((r, i) =>
           typeof r === "number" ? (

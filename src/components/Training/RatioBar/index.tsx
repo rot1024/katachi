@@ -6,6 +6,7 @@ import { TrainingProps, useDrag, CalcStateFn } from "../common";
 import { calcLength } from "./constants";
 import VerticalLineLayer from "./LineLayer";
 import { updateArray } from "@katachi/util";
+import { KonvaEventObject } from "konva/types/Node";
 
 export enum Direction {
   Vertical,
@@ -59,10 +60,31 @@ const RatioBar: React.FC<Props> = ({
   const mainBarX = (screenSize / 3) * 2;
   const secondBarX = screenSize / 3;
   const barY = (screenSize - longerLength) / 2;
+  const nextPoint = state
+    ? state.length >= pointCount
+      ? state.length === 1
+        ? 0
+        : null
+      : state.length
+    : 0;
+
+  const stageEvent = useCallback(
+    (e: KonvaEventObject<MouseEvent | TouchEvent>) => {
+      if (nextPoint !== null) {
+        dragStartCallback([e, nextPoint]);
+      }
+    },
+    [dragStartCallback, nextPoint]
+  );
 
   return (
     <div ref={wrapperRef} className={className}>
-      <Stage width={screenSize} height={screenSize}>
+      <Stage
+        width={screenSize}
+        height={screenSize}
+        onMouseDown={stageEvent}
+        onTouchStart={stageEvent}
+      >
         <Layer>
           <Rect stroke="#eee" width={screenSize} height={screenSize} />
         </Layer>
