@@ -107,15 +107,15 @@ const SquareSimpleLine: React.FC<Props> = ({
               points={[
                 direction === Direction.Horizontal
                   ? mainRectX
-                  : mainRectX + rectSize * (state[0] as number),
+                  : mainRectX + rectSize * state[0],
                 direction === Direction.Horizontal
-                  ? mainRectY + rectSize * (state[0] as number)
+                  ? mainRectY + rectSize * state[0]
                   : mainRectY,
                 direction === Direction.Horizontal
                   ? mainRectX + rectSize
-                  : mainRectX + rectSize * (state[0] as number),
+                  : mainRectX + rectSize * state[0],
                 direction === Direction.Horizontal
-                  ? mainRectY + rectSize * (state[0] as number)
+                  ? mainRectY + rectSize * state[0]
                   : mainRectY + rectSize
               ]}
               stroke="#000"

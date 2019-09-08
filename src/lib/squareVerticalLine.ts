@@ -15,7 +15,7 @@ const squareVerticalLine: TrainingMenu = {
     if (params[1] === 0 || !state || typeof state[0] !== "number") return 0;
     const range = 0.25 - 0.1 * params[0];
     return state
-      ? 1 - Math.min(range, Math.abs(params[1] - (state[0] as number))) / range
+      ? 1 - Math.min(range, Math.abs(params[1] - state[0])) / range
       : 0;
   }
 };

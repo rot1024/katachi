@@ -16,11 +16,7 @@ const square: TrainingMenu = {
     const range = 0.2 - 0.1 * params[1];
     return (
       1 -
-      Math.min(
-        range,
-        Math.abs(1 - params[0] / params[1] - (state[0] as number))
-      ) /
-        range
+      Math.min(range, Math.abs(1 - params[0] / params[1] - state[0])) / range
     );
   }
 };

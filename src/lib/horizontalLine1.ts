@@ -19,9 +19,7 @@ const verticalLine1: TrainingMenu = {
   judgeScore: (params, state) => {
     if (params[0] === 0 || !state || typeof state[0] !== "number") return 0;
     const range = 0.3 - 0.1 * params[0];
-    return (
-      1 - Math.min(range, Math.abs(params[2] - (state[0] as number))) / range
-    );
+    return 1 - Math.min(range, Math.abs(params[2] - state[0])) / range;
   }
 };
 

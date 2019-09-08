@@ -62,9 +62,9 @@ const Square: React.FC<TrainingProps> = ({
             <Line
               points={[
                 rectX,
-                rectY + rectH * (state[0] as number),
+                rectY + rectH * state[0],
                 rectX + rectW,
-                rectY + rectH * (state[0] as number)
+                rectY + rectH * state[0]
               ]}
               stroke="#000"
               strokeWidth={strokeWidth}

@@ -28,10 +28,10 @@ const SquareDogleggedLine: React.FC<TrainingProps> = ({
             state[1],
             (isFirstTime || !lastState[2]
               ? x - mainRectX
-              : (lastState[2] as number) * rectSize + dx) / rectSize,
+              : lastState[2] * rectSize + dx) / rectSize,
             (isFirstTime || !lastState[3]
               ? y - rectY
-              : (lastState[3] as number) * rectSize + dy) / rectSize
+              : lastState[3] * rectSize + dy) / rectSize
           ]
         : updateArray(state, index, (x - mainRectX) / rectSize),
     [mainRectX, rectSize, rectY]
@@ -100,8 +100,8 @@ const SquareDogleggedLine: React.FC<TrainingProps> = ({
             typeof state[2] === "number" &&
             typeof state[3] === "number" && (
               <Circle
-                x={mainRectX + rectSize * (state[2] as number)}
-                y={rectY + rectSize * (state[3] as number)}
+                x={mainRectX + rectSize * state[2]}
+                y={rectY + rectSize * state[3]}
                 radius={4}
                 fill="black"
               />
