@@ -11,3 +11,7 @@ export const updateArray = <T>(a: T[], i: number, val: T) => [
   val,
   ...a.slice(i + 1)
 ];
+
+export const distance = (x: number, y: number, x2: number, y2: number) => {
+  return Math.sqrt((x - x2) ** 2 + (y - y2) ** 2);
+};
