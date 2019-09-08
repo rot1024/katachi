@@ -1,5 +1,5 @@
 // training
-export const baseLength = 400;
+export const baseLength = 300;
 export const calcLength = (ratio: number, scaleCorrection: number) =>
   ratio * baseLength * scaleCorrection;
 

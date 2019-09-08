@@ -14,7 +14,7 @@ const SquarePoint: React.FC<TrainingProps> = ({
   disableOperation,
   onUpdate
 }) => {
-  const rectSize = calcLength(params[0], scaleCorrection);
+  const rectSize = calcLength(scaleCorrection);
   const rectX = (screenSize - rectSize * 2 - margin) / 2;
   const rectY = (screenSize - rectSize) / 2;
   const mainRectX = rectX + margin + rectSize;
@@ -70,8 +70,8 @@ const SquarePoint: React.FC<TrainingProps> = ({
             stroke="#000"
           />
           <Circle
-            x={rectX + rectSize * params[1]}
-            y={rectY + rectSize * params[2]}
+            x={rectX + rectSize * params[0]}
+            y={rectY + rectSize * params[1]}
             fill="#000"
             radius={3}
           />
@@ -88,8 +88,8 @@ const SquarePoint: React.FC<TrainingProps> = ({
             )}
           {isAnswerShown && (
             <Circle
-              x={mainRectX + rectSize * params[1]}
-              y={rectY + rectSize * params[2]}
+              x={mainRectX + rectSize * params[0]}
+              y={rectY + rectSize * params[1]}
               fill="#f00"
               radius={3}
             />

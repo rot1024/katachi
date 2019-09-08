@@ -1,8 +1,7 @@
 // training
-export const minlength = 110;
-export const baseLength = 40;
-export const calcLength = (ratio: number, scaleCorrection: number) =>
-  ratio * baseLength * scaleCorrection + minlength;
+export const baseLength = 150;
+export const calcLength = (scaleCorrection: number) =>
+  baseLength * scaleCorrection;
 
 // style
 export const margin = 20;

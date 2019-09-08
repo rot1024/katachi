@@ -15,7 +15,7 @@ const SquareVerticalLine: React.FC<TrainingProps> = ({
   disableOperation,
   onUpdate
 }) => {
-  const rectSize = calcLength(params[0], scaleCorrection);
+  const rectSize = calcLength(scaleCorrection);
   const rectX = (screenSize - rectSize * 2 - margin) / 2;
   const rectY = (screenSize - rectSize) / 2;
   const mainRectX = rectX + margin + rectSize;
@@ -72,9 +72,9 @@ const SquareVerticalLine: React.FC<TrainingProps> = ({
           />
           <Line
             points={[
-              rectX + rectSize * params[1],
+              rectX + rectSize * params[0],
               rectY,
-              rectX + rectSize * params[2],
+              rectX + rectSize * params[1],
               rectY + rectSize
             ]}
             stroke="#000"
@@ -126,9 +126,9 @@ const SquareVerticalLine: React.FC<TrainingProps> = ({
           {isAnswerShown && (
             <Line
               points={[
-                mainRectX + rectSize * params[1],
+                mainRectX + rectSize * params[0],
                 rectY,
-                mainRectX + rectSize * params[2],
+                mainRectX + rectSize * params[1],
                 rectY + rectSize
               ]}
               stroke="#f00"

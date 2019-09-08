@@ -2,7 +2,7 @@ import { TrainingMenu, Level } from "./common";
 
 const squareDogleggedLine: TrainingMenu = {
   title: "正方形とくの字",
-  paramsSize: 5,
+  paramsSize: 4,
   stateSize: 4,
   duration: {
     [Level.Easy]: Infinity,
@@ -10,7 +10,7 @@ const squareDogleggedLine: TrainingMenu = {
     [Level.Hard]: 15000,
     [Level.Ultimate]: 5000
   },
-  validateParams: ([, top, bottom, x, y]) =>
+  validateParams: ([top, bottom, x, y]) =>
     top > 0.1 &&
     top < 0.9 &&
     bottom > 0.1 &&
@@ -24,13 +24,13 @@ const squareDogleggedLine: TrainingMenu = {
     Math.abs(top - x) > 0.1 &&
     Math.abs(bottom - x) > 0.1,
   judgeScore: (params, state) => {
-    if (params[0] === 0 || !state) return 0;
-    const range = 0.3 - 0.1 * params[0];
+    if (!state) return 0;
+    const range = 0.2;
     return (
       state
         .map((s, i) =>
           typeof s === "number"
-            ? 1 - Math.min(range, Math.abs(params[i + 1] - s)) / range
+            ? 1 - Math.min(range, Math.abs(params[i] - s)) / range
             : 0
         )
         .reduce((a, b) => a + b, 0) / 4
