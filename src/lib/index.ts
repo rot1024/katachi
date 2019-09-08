@@ -5,6 +5,7 @@ import horizontalLine1 from "./horizontalLine1";
 import horizontalLine2 from "./horizontalLine2";
 import square from "./square";
 import squareVerticalLine from "./squareVerticalLine";
+import squareHorizontalLine from "./squareHorizontalLine";
 import squareSkewedLine from "./squareSkewedLine";
 import squarePoint from "./squarePoint";
 import squareDogleggedLine from "./squareDogleggedLine";
@@ -19,6 +20,7 @@ const trainings: { [key in TrainingType]: TrainingMenu } = {
   [TrainingType.HorizontalLine2]: horizontalLine2,
   [TrainingType.Square]: square,
   [TrainingType.SquareVerticalLine]: squareVerticalLine,
+  [TrainingType.SquareHorizontalLine]: squareHorizontalLine,
   [TrainingType.SquareSkewedLine]: squareSkewedLine,
   [TrainingType.SquarePoint]: squarePoint,
   [TrainingType.SquareDogleggedLine]: squareDogleggedLine

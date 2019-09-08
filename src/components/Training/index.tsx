@@ -3,7 +3,7 @@ import React from "react";
 import { TrainingType } from "@katachi/lib";
 import RatioBar, { Direction } from "./RatioBar";
 import Square from "./Square";
-import SquareVerticalLine from "./SquareVerticalLine";
+import SquareSimpleLine from "./SquareSimpleLine";
 import SquareSkewedLine from "./SquareSkewedLine";
 import SquarePoint from "./SquarePoint";
 import SquareDogleggedLine from "./SquareDogleggedLine";
@@ -43,7 +43,9 @@ const Training: React.FC<Props> = props => {
     case TrainingType.Square:
       return <Square {...props} />;
     case TrainingType.SquareVerticalLine:
-      return <SquareVerticalLine {...props} />;
+      return <SquareSimpleLine {...props} direction={Direction.Vertical} />;
+    case TrainingType.SquareHorizontalLine:
+      return <SquareSimpleLine {...props} direction={Direction.Horizontal} />;
     case TrainingType.SquareSkewedLine:
       return <SquareSkewedLine {...props} />;
     case TrainingType.SquarePoint:
